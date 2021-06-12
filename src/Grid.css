@@ -1,0 +1,29 @@
+.default {
+    background-color: grey;
+    height:30px;
+    width:30px;
+}
+
+.start_node {
+    background-color: green;
+    height:30px;
+    width:30px;
+}
+
+.end_node {
+    background-color: red;
+    height:30px;
+    width:30px;
+}
+
+.visited_node {
+    background-color:yellowgreen;
+    height:30px;
+    width:30px;
+}
+
+.path_node {
+    background-color:purple;
+    height:30px;
+    width:30px;
+}
