@@ -7,7 +7,7 @@ class Grid extends React.Component {
         return (
             <Table bordered>
                 <tbody>
-                    {draw(this.props.gridState.visitedNodes, this.props.gridState.sourceNode, this.props.gridState.targetNode, this.props.gridState.gridSize, this.props.gridState.pathToTarget)}           
+                    {draw(this.props.gridState.visitedNodes, this.props.gridState.sourceNode, this.props.gridState.targetNode, this.props.gridState.gridSize, this.props.gridState.pathToTarget, this.props.setUpdateSourceNodeMode, this.props.gridState.isUpdateSourceNodeMode, this.props.updateSourceNode, this.props.setUpdateEndNodeMode, this.props.gridState.isUpdateEndNodeMode, this.props.updateEndNode)}           
                 </tbody>  
             </Table>
         )

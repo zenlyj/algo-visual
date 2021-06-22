@@ -1,3 +1,8 @@
+.table_container {
+    width:90%;
+    height:100%
+}
+
 .default {
     background-color: grey;
     height:30px;
@@ -8,6 +13,14 @@
     background-color: green;
     height:30px;
     width:30px;
+}
+
+.node_btn {
+    padding:0;
+    height:100%;
+    width:100%;
+    border:none;
+    background:none;
 }
 
 .end_node {
