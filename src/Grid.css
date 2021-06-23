@@ -9,7 +9,7 @@
     width:30px;
 }
 
-.start_node {
+.source_node {
     background-color: green;
     height:30px;
     width:30px;
@@ -23,7 +23,7 @@
     background:none;
 }
 
-.end_node {
+.target_node {
     background-color: red;
     height:30px;
     width:30px;

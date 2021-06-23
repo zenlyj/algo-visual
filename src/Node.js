@@ -9,25 +9,32 @@ class Node extends React.Component{
     
     getNodeBackground() {
         let nodeBackground = 'default'
-        if (this.props.isStartNode) nodeBackground = 'start_node'
-        else if (this.props.isEndNode) nodeBackground = 'end_node'
+        if (this.props.isSourceNode) nodeBackground = 'source_node'
+        else if (this.props.isTargetNode) nodeBackground = 'target_node'
         else if (this.props.isPathNode) nodeBackground = 'path_node'
         else if (this.props.isVisitedNode) nodeBackground = 'visited_node'
         return nodeBackground
     }
 
     buttonActionHandler() {
-        if (this.props.isStartNode && !this.props.isUpdateSourceNodeMode && !this.props.isUpdateEndNodeMode) {
-            this.props.setUpdateSourceNodeMode()
+        const isUpdateSourceNodeMode = this.props.nodeModifier.isUpdateSourceNodeMode
+        const isUpdateTargetNodeMode = this.props.nodeModifier.isUpdateTargetNodeMode
+        const setUpdateSourceNodeMode = this.props.nodeModifier.setUpdateSourceNodeMode
+        const setUpdateTargetNodeMode = this.props.nodeModifier.setUpdateTargetNodeMode
+        const updateSourceNode = this.props.nodeModifier.updateSourceNode
+        const updateTargetNode = this.props.nodeModifier.updateTargetNode
+
+        if (this.props.isSourceNode && !isUpdateSourceNodeMode && !isUpdateTargetNodeMode) {
+            setUpdateSourceNodeMode()
         }
-        else if (this.props.isEndNode && !this.props.isUpdateEndNodeMode && !this.props.isUpdateSourceNodeMode) {
-            this.props.setUpdateEndNodeMode()
+        else if (this.props.isTargetNode && !isUpdateTargetNodeMode && !isUpdateSourceNodeMode) {
+            setUpdateTargetNodeMode()
         }
-        else if (this.props.isUpdateSourceNodeMode && !this.props.isEndNode) {
-            this.props.updateSourceNode(this.props.nodeIndex)
+        else if (isUpdateSourceNodeMode && !this.props.isTargetNode) {
+            updateSourceNode(this.props.nodeIndex)
         }
-        else if (this.props.isUpdateEndNodeMode && !this.props.isStartNode) {
-            this.props.updateEndNode(this.props.nodeIndex)
+        else if (isUpdateTargetNodeMode && !this.props.isSourceNode) {
+            updateTargetNode(this.props.nodeIndex)
         }
     }
 
