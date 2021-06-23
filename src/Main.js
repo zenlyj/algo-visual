@@ -1,7 +1,9 @@
 import React from 'react'
 import Grid from './Grid'
+import MenuBar from './MenuBar'
 import {bfs} from './Algorithm'
 import {dfs} from './Algorithm'
+import './Grid.css'
 
 class Main extends React.Component {
     constructor() {
@@ -10,16 +12,21 @@ class Main extends React.Component {
             visitedNodes:new Set(),
             pathToTarget:new Set(),
             sourceNode:{x:5, y:20},
-            targetNode:{x:20, y:30},
-            gridSize:{numRows:30, numCols:40},
+            targetNode:{x:7, y:30},
+            gridSize:{numRows:20, numCols:40},
             isUpdateSourceNodeMode:false,
-            isUpdateTargetNodeMode:false
+            isUpdateTargetNodeMode:false,
+            selectedAlgo:''
         }
         this.updateGrid = this.updateGrid.bind(this)
         this.updateSourceNode = this.updateSourceNode.bind(this)
         this.setUpdateSourceNodeMode = this.setUpdateSourceNodeMode.bind(this)
         this.updateTargetNode = this.updateTargetNode.bind(this)
         this.setUpdateTargetNodeMode = this.setUpdateTargetNodeMode.bind(this)
+        this.setBFSMode = this.setBFSMode.bind(this)
+        this.setDFSMode = this.setDFSMode.bind(this)
+        this.executeAlgo = this.executeAlgo.bind(this)
+        this.reset = this.reset.bind(this)
     }
 
     updateGrid(visitedNodes, pathToTarget) {
@@ -42,6 +49,27 @@ class Main extends React.Component {
         this.setState({isUpdateTargetNodeMode:true})
     }
 
+    setDFSMode() {
+        this.setState({selectedAlgo:'DFS'})
+    }
+    
+    setBFSMode() {
+        this.setState({selectedAlgo:'BFS'})
+    }
+
+    executeAlgo() {
+        if (this.state.selectedAlgo === 'BFS') {
+            bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+        }
+        else if (this.state.selectedAlgo === 'DFS') {
+            dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+        }
+    }
+
+    reset() {
+        this.setState({visitedNodes:new Set(), pathToTarget:new Set()})
+    }
+
     render() {
         const nodeModifier = {
             setUpdateSourceNodeMode:this.setUpdateSourceNodeMode,
@@ -53,10 +81,8 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <Grid gridState={this.state} nodeModifier={nodeModifier}/>
-                <button onClick={()=>bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)} > RUN BFS </button>
-                <button onClick={()=>dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)} > RUN DFS </button>
-                <button onClick={()=>this.setState({visitedNodes:new Set(), pathToTarget:new Set()})}> RESET </button>
+                <MenuBar setBFSMode={this.setBFSMode} setDFSMode={this.setDFSMode} executeAlgo={this.executeAlgo} reset={this.reset}/>
+                <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )
     }

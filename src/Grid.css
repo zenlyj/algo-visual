@@ -1,6 +1,6 @@
 .table_container {
-    width:90%;
-    height:100%
+    width:100%;
+    padding: 100px
 }
 
 .default {
@@ -16,7 +16,7 @@
 }
 
 .node_btn {
-    padding:0;
+    padding:0px;
     height:100%;
     width:100%;
     border:none;

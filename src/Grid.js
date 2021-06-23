@@ -5,7 +5,7 @@ import {draw} from './GridDraw'
 class Grid extends React.Component {
     render() {
         return (
-            <Table bordered>
+            <Table bordered size='sm'>
                 <tbody>
                     {draw(this.props.gridState, this.props.nodeModifier)}           
                 </tbody>  
