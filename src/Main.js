@@ -23,8 +23,7 @@ class Main extends React.Component {
         this.setUpdateSourceNodeMode = this.setUpdateSourceNodeMode.bind(this)
         this.updateTargetNode = this.updateTargetNode.bind(this)
         this.setUpdateTargetNodeMode = this.setUpdateTargetNodeMode.bind(this)
-        this.setBFSMode = this.setBFSMode.bind(this)
-        this.setDFSMode = this.setDFSMode.bind(this)
+        this.setAlgo = this.setAlgo.bind(this)
         this.executeAlgo = this.executeAlgo.bind(this)
         this.reset = this.reset.bind(this)
     }
@@ -57,12 +56,18 @@ class Main extends React.Component {
         this.setState({selectedAlgo:'BFS'})
     }
 
+    setAlgo(algo) {
+        this.setState({selectedAlgo:algo})
+    }
+
     executeAlgo() {
-        if (this.state.selectedAlgo === 'BFS') {
-            bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
-        }
-        else if (this.state.selectedAlgo === 'DFS') {
-            dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+        switch(this.state.selectedAlgo) {
+            case 'BFS':
+                bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+                break
+            case 'DFS':
+                dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+                break
         }
     }
 
@@ -81,7 +86,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setBFSMode={this.setBFSMode} setDFSMode={this.setDFSMode} executeAlgo={this.executeAlgo} reset={this.reset}/>
+                <MenuBar setAlgo={this.setAlgo} executeAlgo={this.executeAlgo} reset={this.reset}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )
