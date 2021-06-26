@@ -13,6 +13,7 @@ export const draw = (gridState, nodeModifier) => {
     const visitedPath = gridState.visitedNodes
     const pathToTarget = gridState.pathToTarget
     const wallNodes = gridState.wallNodes
+    const weakWallNodes = gridState.weakWallNodes
 
     let rows = []
     for (let x = 0; x < numRows; x++) {
@@ -24,7 +25,8 @@ export const draw = (gridState, nodeModifier) => {
             const isVisitedNode = visitedPath.has(currIdx)
             const isPathNode = pathToTarget.has(currIdx)
             const isWallNode = wallNodes.has(currIdx)
-            nodes.push(<Node nodeIndex={{x:x+1, y:y+1}} isSourceNode={isSourceNode} isTargetNode={isTargetNode} isVisitedNode={isVisitedNode} isPathNode={isPathNode} isWallNode={isWallNode} nodeModifier={nodeModifier} />)
+            const isWeakWallNode = weakWallNodes.has(currIdx)
+            nodes.push(<Node nodeIndex={{x:x+1, y:y+1}} isSourceNode={isSourceNode} isTargetNode={isTargetNode} isVisitedNode={isVisitedNode} isPathNode={isPathNode} isWallNode={isWallNode} isWeakWallNode={isWeakWallNode} nodeModifier={nodeModifier} />)
         }
         rows.push(<tr>{nodes}</tr>)
     }

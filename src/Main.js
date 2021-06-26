@@ -13,13 +13,15 @@ class Main extends React.Component {
             visitedNodes:new Set(),
             pathToTarget:new Set(),
             wallNodes:new Set(),
+            weakWallNodes:new Set(),
             sourceNode:{x:5, y:20},
             targetNode:{x:7, y:30},
             gridSize:{numRows:20, numCols:40},
             isUpdateSourceNodeMode:false,
             isUpdateTargetNodeMode:false,
             selectedAlgo:'',
-            isDrawingMode:false
+            isDrawingMode:false,
+            selectedWallType:''
         }
         this.updateGrid = this.updateGrid.bind(this)
         this.updateSourceNode = this.updateSourceNode.bind(this)
@@ -31,6 +33,7 @@ class Main extends React.Component {
         this.reset = this.reset.bind(this)
         this.setDrawingMode = this.setDrawingMode.bind(this)
         this.updateDrawnNodes = this.updateDrawnNodes.bind(this)
+        this.setWallType = this.setWallType.bind(this)
     }
 
     updateGrid(visitedNodes, pathToTarget) {
@@ -53,14 +56,6 @@ class Main extends React.Component {
         this.setState({isUpdateTargetNodeMode:true})
     }
 
-    setDFSMode() {
-        this.setState({selectedAlgo:'DFS'})
-    }
-    
-    setBFSMode() {
-        this.setState({selectedAlgo:'BFS'})
-    }
-
     setAlgo(algo) {
         this.setState({selectedAlgo:algo})
     }
@@ -81,16 +76,22 @@ class Main extends React.Component {
     }
 
     updateDrawnNodes(nodeIndex) {
-        let updatedWallNodes = new Set(this.state.wallNodes)
+        let updatedWallNodes = this.state.selectedWallType === 'UNPASSABLE' ? new Set(this.state.wallNodes) : new Set(this.state.weakWallNodes)
         updatedWallNodes.add(gridIdx(nodeIndex, this.state.gridSize.numCols))
-        this.setState({wallNodes:updatedWallNodes})
+        let updatedState = this.state.selectedWallType === 'UNPASSABLE' ? {wallNodes:updatedWallNodes} : {weakWallNodes:updatedWallNodes}
+        this.setState(updatedState)
     }
 
     reset() {
         this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set()})
     }
 
+    setWallType(wallType) {
+        this.setState({selectedWallType:wallType})
+    }
+
     render() {
+        console.log(this.state.weakWallNodes)
         const nodeModifier = {
             setUpdateSourceNodeMode:this.setUpdateSourceNodeMode,
             setUpdateTargetNodeMode:this.setUpdateTargetNodeMode,
@@ -104,7 +105,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setAlgo={this.setAlgo} executeAlgo={this.executeAlgo} reset={this.reset}/>
+                <MenuBar setAlgo={this.setAlgo} executeAlgo={this.executeAlgo} reset={this.reset} setWallType={this.setWallType}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )

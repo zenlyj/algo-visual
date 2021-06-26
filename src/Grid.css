@@ -46,3 +46,10 @@
     height:30px;
     width:30px;
 }
+
+.weak_wall_node {
+    background-color: blue;
+    height:30px;
+    width:30px;
+    opacity: 0.5;
+}
