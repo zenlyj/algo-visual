@@ -68,10 +68,10 @@ class Main extends React.Component {
     executeAlgo() {
         switch(this.state.selectedAlgo) {
             case 'BFS':
-                bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+                bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
             case 'DFS':
-                dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize)
+                dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
         }
     }

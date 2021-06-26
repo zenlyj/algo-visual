@@ -1,6 +1,6 @@
 import {gridIdx} from './GridDraw'
 
-export const bfs = async (updateGrid, sourceNode, targetNode, gridSize) => {
+export const bfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
     let visitedNodes = new Set()
     let pathToTarget = new Set()
     let queue = []
@@ -13,7 +13,7 @@ export const bfs = async (updateGrid, sourceNode, targetNode, gridSize) => {
         let neighbors = getNeighbors(node, gridSize)
         for (const neighbor of neighbors) {
             const neighborIdx = gridIdx(neighbor, gridSize.numCols)
-            if (!visitedNodes.has(neighborIdx)) {
+            if (!visitedNodes.has(neighborIdx) && !wallNodes.has(neighborIdx)) {
                 parents[neighborIdx] = gridIdx(node, gridSize.numCols)
                 visitedNodes.add(neighborIdx)
                 await(createPromise(updateGrid, visitedNodes, pathToTarget))
@@ -24,7 +24,7 @@ export const bfs = async (updateGrid, sourceNode, targetNode, gridSize) => {
     printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
 }
 
-export const dfs = async (updateGrid, sourceNode, targetNode, gridSize) => {
+export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
     let visitedNodes = new Set()
     let pathToTarget = new Set()
     let stack = []
@@ -41,7 +41,7 @@ export const dfs = async (updateGrid, sourceNode, targetNode, gridSize) => {
         const neighbors = getNeighbors(node, gridSize)
         for (const neighbor of neighbors) {
             const neighborIdx = gridIdx(neighbor, gridSize.numCols)
-            if (!visitedNodes.has(neighborIdx)) {
+            if (!visitedNodes.has(neighborIdx) && !wallNodes.has(neighborIdx)) {
                 parents[neighborIdx] = currIdx
                 stack.push(neighbor)
             }
