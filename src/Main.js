@@ -4,6 +4,7 @@ import MenuBar from './MenuBar'
 import {bfs} from './Algorithm'
 import {dfs} from './Algorithm'
 import './Grid.css'
+import {gridIdx} from './GridDraw'
 
 class Main extends React.Component {
     constructor() {
@@ -11,12 +12,14 @@ class Main extends React.Component {
         this.state = {
             visitedNodes:new Set(),
             pathToTarget:new Set(),
+            wallNodes:new Set(),
             sourceNode:{x:5, y:20},
             targetNode:{x:7, y:30},
             gridSize:{numRows:20, numCols:40},
             isUpdateSourceNodeMode:false,
             isUpdateTargetNodeMode:false,
-            selectedAlgo:''
+            selectedAlgo:'',
+            isDrawingMode:false
         }
         this.updateGrid = this.updateGrid.bind(this)
         this.updateSourceNode = this.updateSourceNode.bind(this)
@@ -26,6 +29,8 @@ class Main extends React.Component {
         this.setAlgo = this.setAlgo.bind(this)
         this.executeAlgo = this.executeAlgo.bind(this)
         this.reset = this.reset.bind(this)
+        this.setDrawingMode = this.setDrawingMode.bind(this)
+        this.updateDrawnNodes = this.updateDrawnNodes.bind(this)
     }
 
     updateGrid(visitedNodes, pathToTarget) {
@@ -71,8 +76,18 @@ class Main extends React.Component {
         }
     }
 
+    setDrawingMode(isDrawingMode) {
+        this.setState({isDrawingMode:isDrawingMode})
+    }
+
+    updateDrawnNodes(nodeIndex) {
+        let updatedWallNodes = new Set(this.state.wallNodes)
+        updatedWallNodes.add(gridIdx(nodeIndex, this.state.gridSize.numCols))
+        this.setState({wallNodes:updatedWallNodes})
+    }
+
     reset() {
-        this.setState({visitedNodes:new Set(), pathToTarget:new Set()})
+        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set()})
     }
 
     render() {
@@ -82,7 +97,10 @@ class Main extends React.Component {
             updateSourceNode:this.updateSourceNode,
             updateTargetNode:this.updateTargetNode,
             isUpdateSourceNodeMode:this.state.isUpdateSourceNodeMode,
-            isUpdateTargetNodeMode:this.state.isUpdateTargetNodeMode
+            isUpdateTargetNodeMode:this.state.isUpdateTargetNodeMode,
+            setDrawingMode:this.setDrawingMode,
+            isDrawingMode:this.state.isDrawingMode,
+            updateDrawnNodes:this.updateDrawnNodes
         }
         return (
             <div>

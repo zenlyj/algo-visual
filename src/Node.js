@@ -4,7 +4,9 @@ import './Grid.css';
 class Node extends React.Component{
     constructor() {
         super()
-        this.buttonActionHandler = this.buttonActionHandler.bind(this)
+        this.mouseDownHandler = this.mouseDownHandler.bind(this)
+        this.mouseUpHandler = this.mouseUpHandler.bind(this)
+        this.mouseEnterHandler = this.mouseEnterHandler.bind(this)
     }
     
     getNodeBackground() {
@@ -13,16 +15,18 @@ class Node extends React.Component{
         else if (this.props.isTargetNode) nodeBackground = 'target_node'
         else if (this.props.isPathNode) nodeBackground = 'path_node'
         else if (this.props.isVisitedNode) nodeBackground = 'visited_node'
+        else if (this.props.isWallNode) nodeBackground = 'wall_node'
         return nodeBackground
     }
 
-    buttonActionHandler() {
+    mouseDownHandler(e) {
+        e.preventDefault()
         const isUpdateSourceNodeMode = this.props.nodeModifier.isUpdateSourceNodeMode
         const isUpdateTargetNodeMode = this.props.nodeModifier.isUpdateTargetNodeMode
         const setUpdateSourceNodeMode = this.props.nodeModifier.setUpdateSourceNodeMode
         const setUpdateTargetNodeMode = this.props.nodeModifier.setUpdateTargetNodeMode
-        const updateSourceNode = this.props.nodeModifier.updateSourceNode
-        const updateTargetNode = this.props.nodeModifier.updateTargetNode
+        const setDrawingMode = this.props.nodeModifier.setDrawingMode
+        const updateDrawnNodes = this.props.nodeModifier.updateDrawnNodes
 
         if (this.props.isSourceNode && !isUpdateSourceNodeMode && !isUpdateTargetNodeMode) {
             setUpdateSourceNodeMode()
@@ -30,18 +34,48 @@ class Node extends React.Component{
         else if (this.props.isTargetNode && !isUpdateTargetNodeMode && !isUpdateSourceNodeMode) {
             setUpdateTargetNodeMode()
         }
-        else if (isUpdateSourceNodeMode && !this.props.isTargetNode) {
-            updateSourceNode(this.props.nodeIndex)
-        }
-        else if (isUpdateTargetNodeMode && !this.props.isSourceNode) {
-            updateTargetNode(this.props.nodeIndex)
+        else if (!this.props.isSourceNode && !this.props.isTargetNode && !isUpdateSourceNodeMode && !isUpdateTargetNodeMode) {
+            setDrawingMode(true)
+            updateDrawnNodes(this.props.nodeIndex)
         }
     }
 
+    mouseUpHandler() {
+        const isUpdateSourceNodeMode = this.props.nodeModifier.isUpdateSourceNodeMode
+        const isUpdateTargetNodeMode = this.props.nodeModifier.isUpdateTargetNodeMode
+        const isDrawingMode = this.props.nodeModifier.isDrawingMode
+        const updateSourceNode = this.props.nodeModifier.updateSourceNode
+        const updateTargetNode = this.props.nodeModifier.updateTargetNode
+        const setDrawingMode = this.props.nodeModifier.setDrawingMode
+
+        if (isUpdateSourceNodeMode) {
+            updateSourceNode(this.props.nodeIndex)
+        } 
+        else if (isUpdateTargetNodeMode) {
+            updateTargetNode(this.props.nodeIndex)
+        }
+        else if (isDrawingMode) {
+            setDrawingMode(false)
+        }
+    }
+
+    mouseEnterHandler() {
+        const isDrawingMode = this.props.nodeModifier.isDrawingMode
+        const updateDrawnNodes = this.props.nodeModifier.updateDrawnNodes
+
+        if (isDrawingMode) {
+            updateDrawnNodes(this.props.nodeIndex)
+        }
+    }
+
+
     render() {
-        return (<td className={this.getNodeBackground()}>
-            <button className='node_btn' onClick={()=>this.buttonActionHandler()}></button>
-        </td>)
+        return (<td className={this.getNodeBackground()}
+                    onMouseDown={(e)=>this.mouseDownHandler(e)}
+                    onMouseUp={(e)=>this.mouseUpHandler()}
+                    onMouseEnter={(e)=>this.mouseEnterHandler()} 
+                >
+                </td>)
     }
 }
 
