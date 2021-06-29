@@ -5,6 +5,13 @@ export const gridIdx = (node, numCols) => {
     return ((node.x-1) * numCols) + (node.y-1)
 }
 
+export const idxToNode = (idx, numCols) => {
+    const div = Math.floor(idx / numCols)
+    const x = Math.floor((idx / numCols) + 1)
+    const y = (idx + 1) - (div * numCols)
+    return {x:x, y:y}
+}
+
 export const draw = (gridState, nodeModifier) => {
     const numCols = gridState.gridSize.numCols
     const numRows = gridState.gridSize.numRows

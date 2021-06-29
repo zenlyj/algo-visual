@@ -13,10 +13,10 @@ class Node extends React.Component{
         let nodeBackground = 'default'
         if (this.props.isSourceNode) nodeBackground = 'source_node'
         else if (this.props.isTargetNode) nodeBackground = 'target_node'
-        else if (this.props.isPathNode) nodeBackground = 'path_node'
-        else if (this.props.isVisitedNode) nodeBackground = 'visited_node'
         else if (this.props.isWallNode) nodeBackground = 'wall_node'
         else if (this.props.isWeakWallNode) nodeBackground = 'weak_wall_node'
+        else if (this.props.isPathNode) nodeBackground = 'path_node'
+        else if (this.props.isVisitedNode) nodeBackground = 'visited_node'
         return nodeBackground
     }
 

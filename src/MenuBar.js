@@ -13,6 +13,7 @@ class MenuBar extends React.Component{
                         <NavDropdown title="SELECT ALGORITHM">
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('BFS')}> Breadth-First Search </button></NavDropdown.Item>
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('DFS')}> Depth-First Search </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('DIJKSTRA')}> Dijkstra </button></NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="SELECT WALL">
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setWallType('UNPASSABLE')}> NON-PASSABLE WALL </button> </NavDropdown.Item>

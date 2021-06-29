@@ -3,6 +3,7 @@ import Grid from './Grid'
 import MenuBar from './MenuBar'
 import {bfs} from './Algorithm'
 import {dfs} from './Algorithm'
+import {dijkstra} from './Algorithm'
 import './Grid.css'
 import {gridIdx} from './GridDraw'
 
@@ -68,6 +69,8 @@ class Main extends React.Component {
             case 'DFS':
                 dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
+            case 'DIJKSTRA':
+                dijkstra(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
         }
     }
 
@@ -83,7 +86,7 @@ class Main extends React.Component {
     }
 
     reset() {
-        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set()})
+        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set(), weakWallNodes:new Set()})
     }
 
     setWallType(wallType) {
@@ -91,7 +94,6 @@ class Main extends React.Component {
     }
 
     render() {
-        console.log(this.state.weakWallNodes)
         const nodeModifier = {
             setUpdateSourceNodeMode:this.setUpdateSourceNodeMode,
             setUpdateTargetNodeMode:this.setUpdateTargetNodeMode,

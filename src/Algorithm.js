@@ -1,4 +1,5 @@
 import {gridIdx} from './GridDraw'
+import { idxToNode } from './GridDraw'
 
 export const bfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
     let visitedNodes = new Set()
@@ -49,6 +50,64 @@ export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNode
     }
     printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
 }
+
+export const dijkstra = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
+    let dist = []
+    let parents = []
+    let sptSet = new Set()
+    let pathToTarget = new Set()
+    const numCells = gridSize.numRows * gridSize.numCols
+    for (let i = 0; i < numCells; i++) {
+        if (i === gridIdx(sourceNode, gridSize.numCols)) {
+            dist[i] = 0
+        } 
+        else {
+            dist[i] = Number.MAX_VALUE
+        }
+    }
+    while (sptSet.size < numCells && !sptSet.has(gridIdx(targetNode, gridSize.numCols))) {
+        let u = minDistance(dist, sptSet)
+        console.log('processed' + u)
+        console.log(idxToNode(u, gridSize.numCols))
+        if (u === -1) break
+        sptSet.add(u)
+        await(createPromise(updateGrid, sptSet, pathToTarget))
+        let neighbors = getNeighbors(idxToNode(u, gridSize.numCols), gridSize)
+        console.log(neighbors)
+        for (const neighbor of neighbors) {
+            const neighborIdx = gridIdx(neighbor, gridSize.numCols) 
+            const edgeWeight = getWeightBetweenNodes(neighborIdx, wallNodes, weakWallNodes)
+            if (!sptSet.has(neighborIdx) && edgeWeight != Number.MAX_VALUE && dist[u] + edgeWeight < dist[neighborIdx]) {
+                parents[neighborIdx] = u
+                dist[neighborIdx] = dist[u] + edgeWeight
+            }
+        }
+    }
+    printPath(parents, targetNode, gridSize, sptSet, pathToTarget, updateGrid)
+}
+
+const minDistance = (dist, sptSet) => {
+    let i = -1
+    let minVal = Number.MAX_VALUE
+    for (let x = 0; x < dist.length; x++) {
+        if (dist[x] < minVal && !sptSet.has(x)) {
+            minVal = dist[x]
+            i = x
+        }
+    }
+    return i
+}
+
+const getWeightBetweenNodes = (neighborIdx, wallNodes, weakWallNodes) => {
+    if (wallNodes.has(neighborIdx)) {
+        return Number.MAX_VALUE
+    } else if (weakWallNodes.has(neighborIdx)) {
+        return 100
+    } else {
+        return 10
+    }
+}
+
 
 const createPromise = (updateGrid, visitedNodes, pathToTarget) => {
     let promise = new Promise((resolve, reject) => {
