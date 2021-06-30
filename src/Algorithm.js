@@ -98,13 +98,80 @@ const minDistance = (dist, sptSet) => {
     return i
 }
 
+export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
+    let dist = []
+    let cost = []
+    let parents = []
+    let closed = new Set()
+    let open = new Set()
+    let visitedNodes = new Set()
+    let pathToTarget = new Set()
+    const numCells = gridSize.numCols * gridSize.numRows
+
+    const sourceIdx = gridIdx(sourceNode, gridSize.numCols)
+    const targetIdx = gridIdx(targetNode, gridSize.numCols)
+    for (let i = 0; i < numCells; i++) {
+        if (i === sourceIdx) {
+            dist[sourceIdx] = 0
+            cost[sourceIdx] = dist[sourceIdx] + heuristic(sourceNode, targetNode)
+        } else {
+            dist[i] = Number.MAX_VALUE
+            cost[i] = Number.MAX_VALUE
+        }
+    }
+    open.add(sourceIdx)
+
+    while (open.size != 0) {
+        const currNodeIdx = findBestCost(open, cost)
+        open.delete(currNodeIdx)
+        closed.add(currNodeIdx)
+        visitedNodes.add(currNodeIdx)
+        await(createPromise(updateGrid, visitedNodes, pathToTarget))
+
+        if (currNodeIdx === targetIdx) break
+        const neighbors = getNeighbors(idxToNode(currNodeIdx, gridSize.numCols), gridSize)
+        for (const neighbor of neighbors) {
+            const neighborIdx = gridIdx(neighbor, gridSize.numCols)
+            // ignore node if it is in closed list or if it is a unpassable wall node
+            if (closed.has(neighborIdx) || wallNodes.has(neighborIdx)) continue
+            parents[neighborIdx] = currNodeIdx 
+            const edgeWeight = getWeightBetweenNodes(neighborIdx, wallNodes, weakWallNodes)
+            const totalWeight = dist[currNodeIdx] + edgeWeight
+            dist[neighborIdx] = totalWeight
+            cost[neighborIdx] = totalWeight + heuristic(neighbor, targetNode)
+            if (open.has(neighborIdx) && (totalWeight > dist[currNodeIdx])) continue
+
+            open.add(neighborIdx)
+        }
+
+    }
+    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
+}
+
+const heuristic = (from, to) => {
+    // manhattan distance
+    return Math.abs(from.x - to.x) + Math.abs(from.y - to.y)
+}
+
+const findBestCost = (open, cost) => {
+    let idx = -1
+    let minVal = Number.MAX_VALUE
+    for (const i of open) {
+        if (cost[i] < minVal) {
+            idx = i
+            minVal = cost[i]
+        } 
+    }
+    return idx
+}
+
 const getWeightBetweenNodes = (neighborIdx, wallNodes, weakWallNodes) => {
     if (wallNodes.has(neighborIdx)) {
         return Number.MAX_VALUE
     } else if (weakWallNodes.has(neighborIdx)) {
-        return 100
+        return 50
     } else {
-        return 10
+        return 1
     }
 }
 

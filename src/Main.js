@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from './Grid'
 import MenuBar from './MenuBar'
-import {bfs} from './Algorithm'
+import {astar, bfs} from './Algorithm'
 import {dfs} from './Algorithm'
 import {dijkstra} from './Algorithm'
 import './Grid.css'
@@ -71,6 +71,8 @@ class Main extends React.Component {
                 break
             case 'DIJKSTRA':
                 dijkstra(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
+            case 'ASTAR':
+                astar(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
         }
     }
 
