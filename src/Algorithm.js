@@ -1,5 +1,6 @@
 import {gridIdx} from './GridDraw'
 import { idxToNode } from './GridDraw'
+import PriorityQueue from './PriorityQueue'
 
 export const bfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
     let visitedNodes = new Set()
@@ -54,48 +55,36 @@ export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNode
 export const dijkstra = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
     let dist = []
     let parents = []
-    let sptSet = new Set()
+    let pq = new PriorityQueue(dist)
+    let visitedNodes = new Set()
     let pathToTarget = new Set()
     const numCells = gridSize.numRows * gridSize.numCols
     for (let i = 0; i < numCells; i++) {
         if (i === gridIdx(sourceNode, gridSize.numCols)) {
             dist[i] = 0
+            pq.enqueue(gridIdx(sourceNode, gridSize.numCols))
         } 
         else {
             dist[i] = Number.MAX_VALUE
         }
-    }
-    while (sptSet.size < numCells && !sptSet.has(gridIdx(targetNode, gridSize.numCols))) {
-        let u = minDistance(dist, sptSet)
-        console.log('processed' + u)
-        console.log(idxToNode(u, gridSize.numCols))
-        if (u === -1) break
-        sptSet.add(u)
-        await(createPromise(updateGrid, sptSet, pathToTarget))
+    }   
+    while (visitedNodes.size < numCells && !visitedNodes.has(gridIdx(targetNode, gridSize.numCols)) && !pq.isEmpty()) {
+        const u = pq.dequeue()
+        console.log(u)
+        visitedNodes.add(u)
+        await(createPromise(updateGrid, visitedNodes, pathToTarget))
         let neighbors = getNeighbors(idxToNode(u, gridSize.numCols), gridSize)
-        console.log(neighbors)
         for (const neighbor of neighbors) {
             const neighborIdx = gridIdx(neighbor, gridSize.numCols) 
             const edgeWeight = getWeightBetweenNodes(neighborIdx, wallNodes, weakWallNodes)
-            if (!sptSet.has(neighborIdx) && edgeWeight != Number.MAX_VALUE && dist[u] + edgeWeight < dist[neighborIdx]) {
+            if (!visitedNodes.has(neighborIdx) && edgeWeight != Number.MAX_VALUE && dist[u] + edgeWeight < dist[neighborIdx]) {
                 parents[neighborIdx] = u
                 dist[neighborIdx] = dist[u] + edgeWeight
+                pq.enqueue(neighborIdx)
             }
         }
     }
-    printPath(parents, targetNode, gridSize, sptSet, pathToTarget, updateGrid)
-}
-
-const minDistance = (dist, sptSet) => {
-    let i = -1
-    let minVal = Number.MAX_VALUE
-    for (let x = 0; x < dist.length; x++) {
-        if (dist[x] < minVal && !sptSet.has(x)) {
-            minVal = dist[x]
-            i = x
-        }
-    }
-    return i
+    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
 }
 
 export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
@@ -104,25 +93,29 @@ export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNo
     let parents = []
     let closed = new Set()
     let open = new Set()
+    let pq = new PriorityQueue(cost)
     let visitedNodes = new Set()
     let pathToTarget = new Set()
     const numCells = gridSize.numCols * gridSize.numRows
 
     const sourceIdx = gridIdx(sourceNode, gridSize.numCols)
     const targetIdx = gridIdx(targetNode, gridSize.numCols)
+
     for (let i = 0; i < numCells; i++) {
         if (i === sourceIdx) {
             dist[sourceIdx] = 0
             cost[sourceIdx] = dist[sourceIdx] + heuristic(sourceNode, targetNode)
+            pq.enqueue(i)
         } else {
             dist[i] = Number.MAX_VALUE
             cost[i] = Number.MAX_VALUE
         }
     }
+    pq.enqueue(sourceIdx)
     open.add(sourceIdx)
 
-    while (open.size != 0) {
-        const currNodeIdx = findBestCost(open, cost)
+    while (!pq.isEmpty()) {
+        const currNodeIdx = pq.dequeue()
         open.delete(currNodeIdx)
         closed.add(currNodeIdx)
         visitedNodes.add(currNodeIdx)
@@ -140,7 +133,7 @@ export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNo
             dist[neighborIdx] = totalWeight
             cost[neighborIdx] = totalWeight + heuristic(neighbor, targetNode)
             if (open.has(neighborIdx) && (totalWeight > dist[currNodeIdx])) continue
-
+            pq.enqueue(neighborIdx)
             open.add(neighborIdx)
         }
 
@@ -153,18 +146,6 @@ const heuristic = (from, to) => {
     return Math.abs(from.x - to.x) + Math.abs(from.y - to.y)
 }
 
-const findBestCost = (open, cost) => {
-    let idx = -1
-    let minVal = Number.MAX_VALUE
-    for (const i of open) {
-        if (cost[i] < minVal) {
-            idx = i
-            minVal = cost[i]
-        } 
-    }
-    return idx
-}
-
 const getWeightBetweenNodes = (neighborIdx, wallNodes, weakWallNodes) => {
     if (wallNodes.has(neighborIdx)) {
         return Number.MAX_VALUE
@@ -174,7 +155,6 @@ const getWeightBetweenNodes = (neighborIdx, wallNodes, weakWallNodes) => {
         return 1
     }
 }
-
 
 const createPromise = (updateGrid, visitedNodes, pathToTarget) => {
     let promise = new Promise((resolve, reject) => {

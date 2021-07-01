@@ -71,8 +71,10 @@ class Main extends React.Component {
                 break
             case 'DIJKSTRA':
                 dijkstra(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
+                break
             case 'ASTAR':
                 astar(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
+                break
         }
     }
 
