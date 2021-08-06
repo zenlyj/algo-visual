@@ -15,6 +15,7 @@ class Main extends React.Component {
             pathToTarget:new Set(),
             wallNodes:new Set(),
             weakWallNodes:new Set(),
+            buffer:{visitedBuffer: [], pathBuffer:[]},
             sourceNode:{x:5, y:20},
             targetNode:{x:7, y:30},
             gridSize:{numRows:20, numCols:40},
@@ -22,23 +23,24 @@ class Main extends React.Component {
             isUpdateTargetNodeMode:false,
             selectedAlgo:'',
             isDrawingMode:false,
-            selectedWallType:''
+            selectedWallType:'',
+            isRunning:false
         }
-        this.updateGrid = this.updateGrid.bind(this)
         this.updateSourceNode = this.updateSourceNode.bind(this)
         this.setUpdateSourceNodeMode = this.setUpdateSourceNodeMode.bind(this)
         this.updateTargetNode = this.updateTargetNode.bind(this)
         this.setUpdateTargetNodeMode = this.setUpdateTargetNodeMode.bind(this)
         this.setAlgo = this.setAlgo.bind(this)
-        this.executeAlgo = this.executeAlgo.bind(this)
         this.reset = this.reset.bind(this)
         this.setDrawingMode = this.setDrawingMode.bind(this)
         this.updateDrawnNodes = this.updateDrawnNodes.bind(this)
         this.setWallType = this.setWallType.bind(this)
+        this.playback = this.playback.bind(this)
+        this.pausePlayback = this.pausePlayback.bind(this)
     }
 
-    updateGrid(visitedNodes, pathToTarget) {
-        this.setState({visitedNodes:visitedNodes, pathToTarget:pathToTarget})
+    componentDidUpdate() {
+        console.log(this.state.buffer[0])
     }
 
     updateSourceNode(sourceNode) {
@@ -58,24 +60,58 @@ class Main extends React.Component {
     }
 
     setAlgo(algo) {
-        this.setState({selectedAlgo:algo})
-    }
-
-    executeAlgo() {
-        switch(this.state.selectedAlgo) {
+        let buffer = []
+        switch(algo) {
             case 'BFS':
-                bfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
+                buffer = bfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
             case 'DFS':
-                dfs(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
+                buffer = dfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
             case 'DIJKSTRA':
-                dijkstra(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
+                buffer = dijkstra(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
                 break
             case 'ASTAR':
-                astar(this.updateGrid, this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
+                buffer = astar(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
                 break
         }
+        this.setState({buffer:buffer})
+    }
+
+    playback() {
+        if (this.state.buffer.pathBuffer.length === 0 && this.state.buffer.visitedBuffer.length === 0) {
+            this.setState({isRunning:false})
+            return;
+        }
+        const createPromise = (visitedNodes, pathToTarget) => {
+            let promise = new Promise((resolve) => {
+                setTimeout(() => {
+                    this.setState({visitedNodes:visitedNodes, pathToTarget:pathToTarget})
+                    resolve();
+                }, 10)
+            })
+            return promise
+        }
+        this.setState({isRunning:true}, async ()=> {
+            let visitedNodes = new Set(this.state.visitedNodes)
+            let pathToTarget = new Set(this.state.pathToTarget)
+            const visitedBuffer = this.state.buffer.visitedBuffer.slice()
+            const pathBuffer = this.state.buffer.pathBuffer.slice()
+            if (visitedBuffer.length > 0) {
+                visitedNodes.add(visitedBuffer[0])
+                visitedBuffer.shift()
+            } else {
+                pathToTarget.add(pathBuffer[0])
+                pathBuffer.shift()
+            }
+            await(createPromise(visitedNodes, pathToTarget))
+            this.setState({visitedNodes:visitedNodes, buffer:{visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}}, 
+                ()=>this.state.isRunning ? this.playback() : null)
+        })
+    }
+
+    pausePlayback() {
+        this.setState({isRunning:false})
     }
 
     setDrawingMode(isDrawingMode) {
@@ -111,7 +147,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setAlgo={this.setAlgo} executeAlgo={this.executeAlgo} reset={this.reset} setWallType={this.setWallType}/>
+                <MenuBar setAlgo={this.setAlgo} playback={this.playback} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )

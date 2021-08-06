@@ -2,11 +2,11 @@ import {gridIdx} from './GridDraw'
 import { idxToNode } from './GridDraw'
 import PriorityQueue from './PriorityQueue'
 
-export const bfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
-    let visitedNodes = new Set()
-    let pathToTarget = new Set()
-    let queue = []
-    let parents = []
+export const bfs = (sourceNode, targetNode, gridSize, wallNodes) => {
+    const visitedNodes = new Set()
+    const visitedBuffer = []
+    const queue = []
+    const parents = []
     queue.push(sourceNode)
     visitedNodes.add(gridIdx(sourceNode, gridSize.numCols))
     while (queue.length !== 0 && !visitedNodes.has(gridIdx(targetNode, gridSize.numCols))) {
@@ -18,19 +18,20 @@ export const bfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNode
             if (!visitedNodes.has(neighborIdx) && !wallNodes.has(neighborIdx)) {
                 parents[neighborIdx] = gridIdx(node, gridSize.numCols)
                 visitedNodes.add(neighborIdx)
-                await(createPromise(updateGrid, visitedNodes, pathToTarget))
+                visitedBuffer.push(neighborIdx)
                 queue.push(neighbor)
             }
         }
     }
-    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
+    const pathBuffer = getPath(parents, targetNode, gridSize)
+    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
 }
 
-export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes) => {
-    let visitedNodes = new Set()
-    let pathToTarget = new Set()
-    let stack = []
-    let parents = []
+export const dfs = (sourceNode, targetNode, gridSize, wallNodes) => {
+    const visitedNodes = new Set()
+    const stack = []
+    const parents = []
+    const visitedBuffer = []
     stack.push(sourceNode)
     visitedNodes.add(gridIdx(sourceNode, gridSize.numCols))
     while(stack.length !== 0 && !visitedNodes.has(gridIdx(targetNode, gridSize.numCols))) {
@@ -38,7 +39,7 @@ export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNode
         const currIdx = gridIdx(node, gridSize.numCols)
         if (!visitedNodes.has(currIdx)) {
             visitedNodes.add(currIdx)
-            await(createPromise(updateGrid, visitedNodes, pathToTarget))
+            visitedBuffer.push(currIdx)
         }
         const neighbors = getNeighbors(node, gridSize)
         for (const neighbor of neighbors) {
@@ -49,15 +50,16 @@ export const dfs = async (updateGrid, sourceNode, targetNode, gridSize, wallNode
             }
         }
     }
-    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
+    const pathBuffer = getPath(parents, targetNode, gridSize)
+    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
 }
 
-export const dijkstra = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
-    let dist = []
-    let parents = []
-    let pq = new PriorityQueue(dist)
-    let visitedNodes = new Set()
-    let pathToTarget = new Set()
+export const dijkstra = (sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
+    const dist = []
+    const parents = []
+    const visitedBuffer = []
+    const pq = new PriorityQueue(dist)
+    const visitedNodes = new Set()
     const numCells = gridSize.numRows * gridSize.numCols
     for (let i = 0; i < numCells; i++) {
         if (i === gridIdx(sourceNode, gridSize.numCols)) {
@@ -70,9 +72,8 @@ export const dijkstra = async (updateGrid, sourceNode, targetNode, gridSize, wal
     }   
     while (visitedNodes.size < numCells && !visitedNodes.has(gridIdx(targetNode, gridSize.numCols)) && !pq.isEmpty()) {
         const u = pq.dequeue()
-        console.log(u)
         visitedNodes.add(u)
-        await(createPromise(updateGrid, visitedNodes, pathToTarget))
+        visitedBuffer.push(u)
         let neighbors = getNeighbors(idxToNode(u, gridSize.numCols), gridSize)
         for (const neighbor of neighbors) {
             const neighborIdx = gridIdx(neighbor, gridSize.numCols) 
@@ -84,18 +85,19 @@ export const dijkstra = async (updateGrid, sourceNode, targetNode, gridSize, wal
             }
         }
     }
-    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
+    const pathBuffer = getPath(parents, targetNode, gridSize)
+    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer} 
 }
 
-export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
-    let dist = []
-    let cost = []
-    let parents = []
-    let closed = new Set()
-    let open = new Set()
-    let pq = new PriorityQueue(cost)
-    let visitedNodes = new Set()
-    let pathToTarget = new Set()
+export const astar = (sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
+    const dist = []
+    const cost = []
+    const parents = []
+    const visitedBuffer = []
+    const closed = new Set()
+    const open = new Set()
+    const pq = new PriorityQueue(cost)
+    const visitedNodes = new Set()
     const numCells = gridSize.numCols * gridSize.numRows
 
     const sourceIdx = gridIdx(sourceNode, gridSize.numCols)
@@ -119,7 +121,7 @@ export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNo
         open.delete(currNodeIdx)
         closed.add(currNodeIdx)
         visitedNodes.add(currNodeIdx)
-        await(createPromise(updateGrid, visitedNodes, pathToTarget))
+        visitedBuffer.push(currNodeIdx)
 
         if (currNodeIdx === targetIdx) break
         const neighbors = getNeighbors(idxToNode(currNodeIdx, gridSize.numCols), gridSize)
@@ -138,7 +140,8 @@ export const astar = async (updateGrid, sourceNode, targetNode, gridSize, wallNo
         }
 
     }
-    printPath(parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid)
+    const pathBuffer = getPath(parents, targetNode, gridSize)
+    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
 }
 
 const heuristic = (from, to) => {
@@ -156,16 +159,6 @@ const getWeightBetweenNodes = (neighborIdx, wallNodes, weakWallNodes) => {
     }
 }
 
-const createPromise = (updateGrid, visitedNodes, pathToTarget) => {
-    let promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            updateGrid(visitedNodes, pathToTarget);
-            resolve();
-        }, 10)
-    })
-    return promise
-}
-
 const getNeighbors = (node, gridSize) => {
     let neighbors = []
     const topNode = {x:(node.x-1), y:(node.y)}
@@ -179,11 +172,12 @@ const getNeighbors = (node, gridSize) => {
     return neighbors
 }
 
-const printPath = async (parents, targetNode, gridSize, visitedNodes, pathToTarget, updateGrid) => {
+const getPath = (parents, targetNode, gridSize) => {
     let parent = parents[gridIdx(targetNode, gridSize.numCols)]
+    let res = []
     while (parent !== undefined) {
-        pathToTarget.add(parent)
-        await(createPromise(updateGrid, visitedNodes, pathToTarget))
+        res.push(parent)
         parent = parents[parent]
     }
+    return res
 }
