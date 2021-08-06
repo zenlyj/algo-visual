@@ -20,7 +20,7 @@ class MenuBar extends React.Component{
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setWallType('UNPASSABLE')}> NON-PASSABLE WALL </button> </NavDropdown.Item>
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setWallType('PASSABLE')}> PASSABLE WALL </button> </NavDropdown.Item>
                         </NavDropdown>
-                        <Nav.Link> <button className='nav_bar_item' onClick={()=> {this.props.isRunning ? this.props.pause() : this.props.playback()}}> 
+                        <Nav.Link> <button className='nav_bar_item' onClick={()=> {this.props.isRunning ? this.props.pause() : this.props.start()}}> 
                             {this.props.isRunning ? 'PAUSE' : 'RUN'} </button> 
                         </Nav.Link>
                         <Nav.Link> <button className='nav_bar_item' onClick={()=>this.props.reset()}> RESET </button> </Nav.Link>

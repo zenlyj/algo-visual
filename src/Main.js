@@ -31,16 +31,14 @@ class Main extends React.Component {
         this.updateTargetNode = this.updateTargetNode.bind(this)
         this.setUpdateTargetNodeMode = this.setUpdateTargetNodeMode.bind(this)
         this.setAlgo = this.setAlgo.bind(this)
+        this.bufferAlgo = this.bufferAlgo.bind(this)
         this.reset = this.reset.bind(this)
         this.setDrawingMode = this.setDrawingMode.bind(this)
         this.updateDrawnNodes = this.updateDrawnNodes.bind(this)
         this.setWallType = this.setWallType.bind(this)
         this.playback = this.playback.bind(this)
         this.pausePlayback = this.pausePlayback.bind(this)
-    }
-
-    componentDidUpdate() {
-        console.log(this.state.buffer[0])
+        this.start = this.start.bind(this)
     }
 
     updateSourceNode(sourceNode) {
@@ -60,8 +58,12 @@ class Main extends React.Component {
     }
 
     setAlgo(algo) {
-        let buffer = []
-        switch(algo) {
+        this.setState({selectedAlgo:algo})
+    }
+
+    bufferAlgo() {
+        let buffer = {}
+        switch(this.state.selectedAlgo) {
             case 'BFS':
                 buffer = bfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
@@ -74,8 +76,20 @@ class Main extends React.Component {
             case 'ASTAR':
                 buffer = astar(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
                 break
+            default:
+                return
         }
+        const visitedBuffer = buffer.visitedBuffer
+        buffer.visitedBuffer = visitedBuffer.slice(this.state.visitedNodes.size, visitedBuffer.length-1)
         this.setState({buffer:buffer})
+    }
+
+    async start() {
+        await(new Promise((resolve) => {
+            this.bufferAlgo()
+            resolve()
+        }))
+        this.playback()
     }
 
     playback() {
@@ -147,7 +161,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setAlgo={this.setAlgo} playback={this.playback} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
+                <MenuBar setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )
