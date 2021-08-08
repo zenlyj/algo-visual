@@ -50,10 +50,10 @@ class Node extends React.Component{
         const updateTargetNode = this.props.nodeModifier.updateTargetNode
         const setDrawingMode = this.props.nodeModifier.setDrawingMode
 
-        if (isUpdateSourceNodeMode) {
+        if (isUpdateSourceNodeMode && this.props.isDefaultNode) {
             updateSourceNode(this.props.nodeIndex)
         } 
-        else if (isUpdateTargetNodeMode) {
+        else if (isUpdateTargetNodeMode && this.props.isDefaultNode) {
             updateTargetNode(this.props.nodeIndex)
         }
         else if (isDrawingMode) {
