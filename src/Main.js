@@ -1,9 +1,7 @@
 import React from 'react'
 import Grid from './Grid'
 import MenuBar from './MenuBar'
-import {astar, bfs} from './Algorithm'
-import {dfs} from './Algorithm'
-import {dijkstra} from './Algorithm'
+import {astar, bfs, dfs, dijkstra} from './Algorithm'
 import './Grid.css'
 import {gridIdx} from './GridDraw'
 

@@ -1,5 +1,4 @@
-import {gridIdx} from './GridDraw'
-import { idxToNode } from './GridDraw'
+import {gridIdx, idxToNode} from './GridDraw'
 import PriorityQueue from './PriorityQueue'
 
 export const bfs = (sourceNode, targetNode, gridSize, wallNodes) => {

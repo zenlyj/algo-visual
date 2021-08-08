@@ -38,7 +38,7 @@ class Node extends React.Component{
         }
         else if (!this.props.isSourceNode && !this.props.isTargetNode && !isUpdateSourceNodeMode && !isUpdateTargetNodeMode) {
             setDrawingMode(true)
-            updateDrawnNodes(this.props.nodeIndex)
+            if (this.props.isDefaultNode) updateDrawnNodes(this.props.nodeIndex)
         }
     }
 
@@ -63,9 +63,9 @@ class Node extends React.Component{
 
     mouseEnterHandler() {
         const isDrawingMode = this.props.nodeModifier.isDrawingMode
-        const updateDrawnNodes = this.props.nodeModifier.updateDrawnNodes
+        const updateDrawnNodes = this.props.nodeModifier.updateDrawnNodes 
 
-        if (isDrawingMode) {
+        if (isDrawingMode && this.props.isDefaultNode) {
             updateDrawnNodes(this.props.nodeIndex)
         }
     }
