@@ -23,7 +23,8 @@ class MenuBar extends React.Component{
                         <Nav.Link> <button className='nav_bar_item' onClick={()=> {this.props.isRunning ? this.props.pause() : this.props.start()}}> 
                             {this.props.isRunning ? 'PAUSE' : 'RUN'} </button> 
                         </Nav.Link>
-                        <Nav.Link> <button className='nav_bar_item' onClick={()=>this.props.reset()}> RESET </button> </Nav.Link>
+                        {!this.props.isRunning ? <Nav.Link> <button className='nav_bar_item' onClick={()=>this.props.clearVisuals()}> CLEAR VISUALISATIONS </button> </Nav.Link> : null}
+                        {!this.props.isRunning ? <Nav.Link> <button className='nav_bar_item' onClick={()=>this.props.reset()}> RESET BOARD </button> </Nav.Link> : null}
                     </Nav>
                 </NavBar.Collapse>
             </NavBar>

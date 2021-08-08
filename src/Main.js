@@ -38,6 +38,7 @@ class Main extends React.Component {
         this.playback = this.playback.bind(this)
         this.pausePlayback = this.pausePlayback.bind(this)
         this.start = this.start.bind(this)
+        this.clearVisuals = this.clearVisuals.bind(this)
     }
 
     updateSourceNode(sourceNode) {
@@ -59,7 +60,8 @@ class Main extends React.Component {
     }
 
     setAlgo(algo) {
-        this.setState({selectedAlgo:algo})
+        if (this.state.isRunning) return
+        this.setState({selectedAlgo:algo, visitedNodes:new Set(), pathToTarget:new Set(), buffer: new Buffer([], [])})
     }
 
     bufferAlgo() {
@@ -85,6 +87,12 @@ class Main extends React.Component {
     }
 
     async start() {
+        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
+            await(new Promise((resolve) => {
+                this.clearVisuals()
+                resolve()
+            }))
+        }
         await(new Promise((resolve) => {
             this.bufferAlgo()
             resolve()
@@ -94,13 +102,12 @@ class Main extends React.Component {
 
     playback() {
         const createPromise = (visitedNodes, pathToTarget) => {
-            let promise = new Promise((resolve) => {
+            return new Promise((resolve) => {
                 setTimeout(() => {
                     this.setState({visitedNodes:visitedNodes, pathToTarget:pathToTarget})
                     resolve();
                 }, 10)
             })
-            return promise
         }
         this.setState({isRunning:true}, async ()=> {
             while (this.state.isRunning) {
@@ -140,6 +147,10 @@ class Main extends React.Component {
         this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set(), weakWallNodes:new Set(), buffer:new Buffer([], [])})
     }
 
+    clearVisuals() {
+        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), buffer:new Buffer([], [])})
+    }
+
     setWallType(wallType) {
         this.setState({selectedWallType:wallType})
     }
@@ -158,7 +169,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
+                <MenuBar setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )
