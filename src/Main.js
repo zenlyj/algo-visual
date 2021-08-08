@@ -91,10 +91,6 @@ class Main extends React.Component {
     }
 
     playback() {
-        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
-            this.setState({isRunning:false})
-            return;
-        }
         const createPromise = (visitedNodes, pathToTarget) => {
             let promise = new Promise((resolve) => {
                 setTimeout(() => {
@@ -105,15 +101,20 @@ class Main extends React.Component {
             return promise
         }
         this.setState({isRunning:true}, async ()=> {
-            let visitedNodes = new Set(this.state.visitedNodes)
-            let pathToTarget = new Set(this.state.pathToTarget)
-            if (!this.state.buffer.visitedIsEmpty()) {
-                visitedNodes.add(this.state.buffer.consumeVisited())
-            } else {
-                pathToTarget.add(this.state.buffer.consumePath())
+            while (this.state.isRunning) {
+                if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
+                    this.setState({isRunning:false})
+                    break
+                }
+                let visitedNodes = new Set(this.state.visitedNodes)
+                let pathToTarget = new Set(this.state.pathToTarget)
+                if (!this.state.buffer.visitedIsEmpty()) {
+                    visitedNodes.add(this.state.buffer.consumeVisited())
+                } else {
+                    pathToTarget.add(this.state.buffer.consumePath())
+                }
+                await(createPromise(visitedNodes, pathToTarget))
             }
-            await(createPromise(visitedNodes, pathToTarget))
-            if (this.state.isRunning) this.playback()
         })
     }
 
