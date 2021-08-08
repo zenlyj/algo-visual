@@ -1,5 +1,6 @@
 import {gridIdx, idxToNode} from './GridDraw'
 import PriorityQueue from './PriorityQueue'
+import Buffer from './Buffer'
 
 export const bfs = (sourceNode, targetNode, gridSize, wallNodes) => {
     const visitedNodes = new Set()
@@ -23,7 +24,7 @@ export const bfs = (sourceNode, targetNode, gridSize, wallNodes) => {
         }
     }
     const pathBuffer = getPath(parents, targetNode, gridSize)
-    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
+    return new Buffer(visitedBuffer, pathBuffer)
 }
 
 export const dfs = (sourceNode, targetNode, gridSize, wallNodes) => {
@@ -50,7 +51,7 @@ export const dfs = (sourceNode, targetNode, gridSize, wallNodes) => {
         }
     }
     const pathBuffer = getPath(parents, targetNode, gridSize)
-    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
+    return new Buffer(visitedBuffer, pathBuffer)
 }
 
 export const dijkstra = (sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
@@ -85,7 +86,7 @@ export const dijkstra = (sourceNode, targetNode, gridSize, wallNodes, weakWallNo
         }
     }
     const pathBuffer = getPath(parents, targetNode, gridSize)
-    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer} 
+    return new Buffer(visitedBuffer, pathBuffer) 
 }
 
 export const astar = (sourceNode, targetNode, gridSize, wallNodes, weakWallNodes) => {
@@ -140,7 +141,7 @@ export const astar = (sourceNode, targetNode, gridSize, wallNodes, weakWallNodes
 
     }
     const pathBuffer = getPath(parents, targetNode, gridSize)
-    return {visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}
+    return new Buffer(visitedBuffer, pathBuffer)
 }
 
 const heuristic = (from, to) => {

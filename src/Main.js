@@ -4,6 +4,7 @@ import MenuBar from './MenuBar'
 import {astar, bfs, dfs, dijkstra} from './Algorithm'
 import './Grid.css'
 import {gridIdx} from './GridDraw'
+import Buffer from './Buffer'
 
 class Main extends React.Component {
     constructor() {
@@ -13,7 +14,7 @@ class Main extends React.Component {
             pathToTarget:new Set(),
             wallNodes:new Set(),
             weakWallNodes:new Set(),
-            buffer:{visitedBuffer: [], pathBuffer:[]},
+            buffer:new Buffer([],[]),
             sourceNode:{x:5, y:20},
             targetNode:{x:7, y:30},
             gridSize:{numRows:20, numCols:40},
@@ -60,7 +61,7 @@ class Main extends React.Component {
     }
 
     bufferAlgo() {
-        let buffer = {}
+        let buffer = null
         switch(this.state.selectedAlgo) {
             case 'BFS':
                 buffer = bfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
@@ -77,8 +78,7 @@ class Main extends React.Component {
             default:
                 return
         }
-        const visitedBuffer = buffer.visitedBuffer
-        buffer.visitedBuffer = visitedBuffer.slice(this.state.visitedNodes.size, visitedBuffer.length-1)
+        buffer.update(this.state.visitedNodes.size)
         this.setState({buffer:buffer})
     }
 
@@ -91,7 +91,7 @@ class Main extends React.Component {
     }
 
     playback() {
-        if (this.state.buffer.pathBuffer.length === 0 && this.state.buffer.visitedBuffer.length === 0) {
+        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
             this.setState({isRunning:false})
             return;
         }
@@ -107,18 +107,13 @@ class Main extends React.Component {
         this.setState({isRunning:true}, async ()=> {
             let visitedNodes = new Set(this.state.visitedNodes)
             let pathToTarget = new Set(this.state.pathToTarget)
-            const visitedBuffer = this.state.buffer.visitedBuffer.slice()
-            const pathBuffer = this.state.buffer.pathBuffer.slice()
-            if (visitedBuffer.length > 0) {
-                visitedNodes.add(visitedBuffer[0])
-                visitedBuffer.shift()
+            if (!this.state.buffer.visitedIsEmpty()) {
+                visitedNodes.add(this.state.buffer.consumeVisited())
             } else {
-                pathToTarget.add(pathBuffer[0])
-                pathBuffer.shift()
+                pathToTarget.add(this.state.buffer.consumePath())
             }
             await(createPromise(visitedNodes, pathToTarget))
-            this.setState({visitedNodes:visitedNodes, buffer:{visitedBuffer:visitedBuffer, pathBuffer:pathBuffer}}, 
-                ()=>this.state.isRunning ? this.playback() : null)
+            if (this.state.isRunning) this.playback()
         })
     }
 
@@ -131,6 +126,7 @@ class Main extends React.Component {
     }
 
     updateDrawnNodes(nodeIndex) {
+        if (this.state.isRunning) return;
         let updatedWallNodes = this.state.selectedWallType === 'UNPASSABLE' ? new Set(this.state.wallNodes) : new Set(this.state.weakWallNodes)
         updatedWallNodes.add(gridIdx(nodeIndex, this.state.gridSize.numCols))
         let updatedState = this.state.selectedWallType === 'UNPASSABLE' ? {wallNodes:updatedWallNodes} : {weakWallNodes:updatedWallNodes}
