@@ -49,11 +49,13 @@ class Main extends React.Component {
     }
 
     setUpdateSourceNodeMode() {
-        this.setState({isUpdateSourceNodeMode:true})
+        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty())
+            this.setState({isUpdateSourceNodeMode:true})
     }
 
     setUpdateTargetNodeMode() {
-        this.setState({isUpdateTargetNodeMode:true})
+        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty())
+            this.setState({isUpdateTargetNodeMode:true})
     }
 
     setAlgo(algo) {
@@ -135,7 +137,7 @@ class Main extends React.Component {
     }
 
     reset() {
-        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set(), weakWallNodes:new Set()})
+        this.setState({visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set(), weakWallNodes:new Set(), buffer:new Buffer([], [])})
     }
 
     setWallType(wallType) {
