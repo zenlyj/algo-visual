@@ -5,6 +5,7 @@ import {astar, bfs, dfs, dijkstra} from './Algorithm'
 import './Grid.css'
 import {gridIdx} from './GridDraw'
 import Buffer from './Buffer'
+import {mazeRecursiveDiv} from './MazeGenerator'
 
 class Main extends React.Component {
     constructor() {
@@ -17,7 +18,7 @@ class Main extends React.Component {
             buffer:new Buffer([],[]),
             sourceNode:{x:5, y:20},
             targetNode:{x:7, y:30},
-            gridSize:{numRows:20, numCols:40},
+            gridSize:{numRows:25, numCols:45},
             isUpdateSourceNodeMode:false,
             isUpdateTargetNodeMode:false,
             selectedAlgo:'',
@@ -39,6 +40,7 @@ class Main extends React.Component {
         this.pausePlayback = this.pausePlayback.bind(this)
         this.start = this.start.bind(this)
         this.clearVisuals = this.clearVisuals.bind(this)
+        this.generateMaze = this.generateMaze.bind(this)
     }
 
     updateSourceNode(sourceNode) {
@@ -50,12 +52,12 @@ class Main extends React.Component {
     }
 
     setUpdateSourceNodeMode() {
-        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty())
+        if (this.state.buffer.isEmpty())
             this.setState({isUpdateSourceNodeMode:true})
     }
 
     setUpdateTargetNodeMode() {
-        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty())
+        if (this.state.buffer.isEmpty())
             this.setState({isUpdateTargetNodeMode:true})
     }
 
@@ -87,7 +89,7 @@ class Main extends React.Component {
     }
 
     async start() {
-        if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
+        if (this.state.buffer.isEmpty()) {
             await(new Promise((resolve) => {
                 this.clearVisuals()
                 resolve()
@@ -155,6 +157,23 @@ class Main extends React.Component {
         this.setState({selectedWallType:wallType})
     }
 
+    async generateMaze() {
+        const createPromise = (wallNodes) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    this.setState({wallNodes:wallNodes})
+                    resolve();
+                }, 10)
+            })
+        }
+        const res = mazeRecursiveDiv(this.state.gridSize, this.state.sourceNode, this.state.targetNode)
+        const wallNodes = new Set()
+        for (let wallNode of res) {
+            wallNodes.add(wallNode)
+            await(createPromise(wallNodes))
+        }
+    }
+
     render() {
         const nodeModifier = {
             setUpdateSourceNodeMode:this.setUpdateSourceNodeMode,
@@ -169,7 +188,7 @@ class Main extends React.Component {
         }
         return (
             <div>
-                <MenuBar setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
+                <MenuBar genMaze={this.generateMaze} setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )

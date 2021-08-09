@@ -10,6 +10,9 @@ class MenuBar extends React.Component{
                 <NavBar.Brand> PATH-FINDER </NavBar.Brand>
                 <NavBar.Collapse id ="responsive-navbar-nav">
                     <Nav>
+                        <Nav.Link> <button className='nav_bar_item' onClick={()=>this.props.genMaze()}> 
+                            GENERATE MAZE </button> 
+                        </Nav.Link>
                         <NavDropdown title="SELECT ALGORITHM">
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('BFS')}> Breadth-First Search </button></NavDropdown.Item>
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('DFS')}> Depth-First Search </button></NavDropdown.Item>

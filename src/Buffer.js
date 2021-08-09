@@ -27,4 +27,8 @@ export default class Buffer {
     pathIsEmpty() {
         return this._path.length === 0
     }
+
+    isEmpty() {
+        return this.visitedIsEmpty() && this.pathIsEmpty()
+    }
 }
