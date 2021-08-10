@@ -1,6 +1,7 @@
 import React from 'react'
 import Grid from './Grid'
 import MenuBar from './MenuBar'
+import SortChart from './SortChart'
 import {astar, bfs, dfs, dijkstra} from './Algorithm'
 import './Grid.css'
 import {gridIdx} from './GridDraw'
@@ -189,7 +190,8 @@ class Main extends React.Component {
         return (
             <div>
                 <MenuBar genMaze={this.generateMaze} setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
-                <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
+                <SortChart />
+                {/* <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div> */}
             </div>
         )
     }
