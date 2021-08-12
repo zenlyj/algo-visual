@@ -2,55 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BarChart, Bar, Cell, ResponsiveContainer } from 'recharts';
 
-const randInt = (low, high) => {
-  const min = Math.ceil(low)
-  const max = Math.floor(high)
-  return Math.floor(Math.random() * (max-min+1)+min)
-}
-
-const generateData = () => {
-  let data = []
-  for (let i = 0; i < 40; i++) {
-    data.push(randInt(3, 40))
-  }
-  data = data.map(x => {
+const generateData = (array) => {
+  let data = array.map(x => {
     return {value:x}
   })
   return data
 }
 
-const getPath = (x, y, width, height) => `M${x},${y + height}
-          C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3} ${x + width / 2}, ${y}
-          C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${x + width}, ${y + height}
-          Z`;
-
-const TriangleBar = (props) => {
-  const { fill, x, y, width, height } = props;
-
-  return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
-};
-
-TriangleBar.propTypes = {
-  fill: PropTypes.string,
-  x: PropTypes.number,
-  y: PropTypes.number,
-  width: PropTypes.number,
-  height: PropTypes.number,
-};
+const colors = ["#84d88a", "#8884d8", "#d88487"]
 
 export default class SortChart extends React.Component {
-  constructor() {
-    super()
-    this.state = {data:generateData()}
-  }
-  
   render() {
+    const data = generateData(this.props.array)
     return (
-      <ResponsiveContainer width="100%" height={500}>
+      <ResponsiveContainer width="100%" height={600}>
         <BarChart
           width={500}
           height={300}
-          data={this.state.data}
+          data={data}
           margin={{
             top: 40,
             right: 20,
@@ -58,9 +27,9 @@ export default class SortChart extends React.Component {
             bottom: 20,
           }}
         >
-          <Bar dataKey="value" fill="#8884d8" shape={<TriangleBar />} label={{position:'insideBottom'}}>
-            {this.state.data.map((entry, index) => (
-              <Cell key={`cell-${index}`} />
+          <Bar dataKey="value" fill={"#8884d8"}>
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={this.props.sorted.has(index) ? colors[0] : index === this.props.scanElement ? colors[2] : colors[1]} />
             ))}
           </Bar>
         </BarChart>

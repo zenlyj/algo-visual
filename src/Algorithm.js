@@ -181,7 +181,3 @@ const getPath = (parents, targetNode, gridSize) => {
     }
     return res
 }
-
-const mazeHelper = (wallNodes, vertStart, vertEnd, horizStart, horizEnd) => {
-
-}
