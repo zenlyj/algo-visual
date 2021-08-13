@@ -1,7 +1,7 @@
 import React from 'react'
 import SortChart from './SortChart'
 import SortingMenuBar from './SortingMenuBar'
-import {selectionSort} from './SortingAlgorithms'
+import {bubbleSort, selectionSort} from './SortingAlgorithms'
 
 class Sorter extends React.Component {
     constructor() {
@@ -51,6 +51,25 @@ class Sorter extends React.Component {
         }
     }
 
+    async playbackBubble(createPromise) {
+        const buffer = bubbleSort(this.state.array)
+        const sortedSet = new Set()
+        while (!buffer.isEmpty()) {
+            const scan = buffer.consumeScan()
+            const diagram = buffer.consumeDiagram()
+            if (scan === undefined && diagram === undefined) {
+                sortedSet.add(buffer.consumeSorted())
+                await(createPromise(this.state.array, sortedSet, null))
+                continue
+            }
+            for (let i = 0; i < scan.length; i++) {
+                await(createPromise(diagram[i], sortedSet, scan[i]))
+            }
+            sortedSet.add(buffer.consumeSorted())
+            await(createPromise(diagram[scan.length-1], sortedSet, null))
+        }
+    }
+
     start() {
         const createPromise = (array, sorted, scanElement) => {
             return new Promise((resolve) => {
@@ -65,6 +84,7 @@ class Sorter extends React.Component {
                 this.playbackSelection(createPromise)
                 break
             case 'BUBBLE':
+                this.playbackBubble(createPromise)
                 break
             default:
         }
