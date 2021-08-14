@@ -34,10 +34,6 @@ export const bubbleSort = (arr) => {
     for (let i = 0; i < arr.length-1; i++) {
         const scanThru = []
         const diagramFrame = []
-        // if (i===0) {
-        //     diagramFrame.push(unsorted)
-        //     unsorted = unsorted.slice(0, arr.length)
-        // } 
         for (let j = 0; j < arr.length-1-i; j++) {
             scanThru.push(j)
             if (unsorted[j] > unsorted[j+1]) {
@@ -52,6 +48,63 @@ export const bubbleSort = (arr) => {
     }
     sorted.push(0)
     return new SortBuffer(diagram,sorted,scan)
+}
+
+export const mergeSort = (arr) => {
+    const res = arr.slice(0, arr.length)
+    const diagram = []
+    const scan = []
+    const sorted = []
+    mergeSortHelper(diagram, scan, res, 0, arr.length-1)
+    for (let i = 0; i < arr.length; i++) sorted.push(i)
+    return new SortBuffer(diagram, sorted, scan)
+}
+
+const mergeSortHelper = (diagram, scan, arr, left, right) => {
+    if (left >= right) return;
+    const mid = Math.floor((left+right)/2)
+    mergeSortHelper(diagram, scan, arr, left, mid)
+    mergeSortHelper(diagram, scan, arr, mid+1, right)
+    merge(diagram, scan, arr, left, right, mid)
+}
+
+const merge = (diagram, scan, arr, left, right, mid) => {
+    const n1 = mid - left + 1
+    const n2 = right - mid
+
+    const tempLeft = []
+    const tempRight = []
+
+    for (let i = 0; i < n1; i++) {
+        tempLeft[i] = arr[left+i]
+    }
+    for (let i = 0; i < n2; i++) {
+        tempRight[i] = arr[mid+1+i]
+    }
+
+    let i = 0
+    let j = 0
+    let k = left
+    const scanThru = []
+    while (i < tempLeft.length && j < tempRight.length) {
+        scanThru.push(k)
+        if (tempLeft[i] < tempRight[j]) {
+            arr[k++] = tempLeft[i++]
+        } else {
+            arr[k++] = tempRight[j++]
+        }
+    }
+
+    while (i < tempLeft.length) {
+        scanThru.push(k)
+        arr[k++] = tempLeft[i++]
+    }
+    while (j < tempRight.length) {
+        scanThru.push(k)
+        arr[k++] = tempRight[j++]
+    }
+    diagram.push(arr.slice(0, arr.length))
+    scan.push(scanThru)
 }
 
 const swap = (arr, x, y) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import SortChart from './SortChart'
 import SortingMenuBar from './SortingMenuBar'
-import {bubbleSort, selectionSort} from './SortingAlgorithms'
+import {bubbleSort, mergeSort, selectionSort} from './SortingAlgorithms'
 
 class Sorter extends React.Component {
     constructor() {
@@ -70,13 +70,33 @@ class Sorter extends React.Component {
         }
     }
 
+    async playbackMerge(createPromise) {
+        const buffer = mergeSort(this.state.array)
+        const sortedSet = new Set()
+        let i = 0
+        while (!buffer.isEmpty()) {
+            i++
+            if (i >= this.state.array.length) {
+                for (let j = 0; j < this.state.array.length; j++) sortedSet.add(buffer.consumeSorted())
+                await(createPromise(this.state.array, sortedSet, null))
+            } else {
+                const diagram = buffer.consumeDiagram()
+                const scanThru = buffer.consumeScan()
+                for (let j = 0; j < scanThru.length; j++) {
+                    await(createPromise(this.state.array, sortedSet, scanThru[j]))
+                }
+                await(createPromise(diagram, sortedSet, null))
+            }
+        }
+    }
+
     start() {
         const createPromise = (array, sorted, scanElement) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     this.setState({array:array, sorted:sorted, scanElement:scanElement})
                     resolve();
-                }, 10)
+                }, 50)
             })
         }
         switch(this.state.selectedAlgo) {
@@ -85,6 +105,9 @@ class Sorter extends React.Component {
                 break
             case 'BUBBLE':
                 this.playbackBubble(createPromise)
+                break
+            case 'MERGE':
+                this.playbackMerge(createPromise)
                 break
             default:
         }
