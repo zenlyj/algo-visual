@@ -107,6 +107,41 @@ const merge = (diagram, scan, arr, left, right, mid) => {
     scan.push(scanThru)
 }
 
+export const quickSort = (arr) => {
+    const res = arr.slice(0, arr.length)
+    const diagram = []
+    const sorted = []
+    const scan = []
+    const pivots = []
+    quickSortHelper(pivots, diagram, scan, res, 0, res.length-1)
+    for (let i = 0; i < arr.length; i++) sorted.push(i)
+    return new SortBuffer(diagram, sorted, scan, pivots)
+}
+
+const quickSortHelper = (pivots, diagram, scan, arr, left, right) => {
+    if (left >= right) return
+    let pivotIdx = partition(pivots, diagram, scan, arr, left, right)
+    quickSortHelper(pivots, diagram, scan, arr, left, pivotIdx-1)
+    quickSortHelper(pivots, diagram, scan, arr, pivotIdx+1, right)
+}
+
+const partition = (pivots, diagram, scan, arr, left, right) => {
+    const pivot = arr[right]
+    let i = left - 1
+    const scanThru = []
+    for (let j = left; j < right; j++) {
+        scanThru.push(j)
+        if (arr[j] < pivot) {
+            swap(arr, ++i, j)
+        }
+    }
+    swap(arr, i+1, right)
+    diagram.push(arr.slice(0, arr.length))
+    scan.push(scanThru)
+    pivots.push({before:right, after:i+1})
+    return i+1
+}
+
 const swap = (arr, x, y) => {
     const temp = arr[x]
     arr[x] = arr[y]

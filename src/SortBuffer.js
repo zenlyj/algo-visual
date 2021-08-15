@@ -1,8 +1,9 @@
 export default class SortBuffer {
-    constructor(diagram, sorted, scan) {
+    constructor(diagram, sorted, scan, quickSortPivots) {
         this._diagram = diagram
         this._sorted = sorted
         this._scan = scan
+        this._quickSortPivots = quickSortPivots
     }
 
     consumeDiagram() {
@@ -20,6 +21,12 @@ export default class SortBuffer {
     consumeScan() {
         const head = this._scan[0]
         this._scan.shift()
+        return head
+    }
+
+    consumePivots() {
+        const head = this._quickSortPivots[0]
+        this._quickSortPivots.shift()
         return head
     }
 
