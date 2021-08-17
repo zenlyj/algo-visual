@@ -1,7 +1,7 @@
 import React from 'react'
 import SortChart from './SortChart'
 import SortingMenuBar from './SortingMenuBar'
-import {bubbleSort, mergeSort, quickSort, selectionSort} from './SortingAlgorithms'
+import {bubbleSort, mergeSort, quickSort, selectionSort, gravitySort} from './SortingAlgorithms'
 
 class Sorter extends React.Component {
     constructor() {
@@ -15,7 +15,7 @@ class Sorter extends React.Component {
             scanElement:null,
             pivotBefore:null,
             pivotAfter:null,
-            delay:50
+            delay:100
         }
         this.setAlgo = this.setAlgo.bind(this)
         this.generateRandomArray = this.generateRandomArray.bind(this)
@@ -111,6 +111,20 @@ class Sorter extends React.Component {
         }
     }
 
+    async playbackGravity(createPromise) {
+        const buffer = gravitySort(this.state.array)
+        const sortedSet = new Set()
+        while (!buffer.isEmpty()) {
+            const diagram = buffer.consumeDiagram()
+            if (diagram === undefined) {
+                for (let i = 0; i < this.state.array.length; i++) sortedSet.add(buffer.consumeSorted())
+                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null, null))
+            } else {
+                await(createPromise(this.state.delay, diagram, sortedSet, null, null, null))
+            }
+        }
+    }
+
     start() {
         const createPromise = (delay, array, sorted, scanElement, pivotBefore, pivotAfter) => {
             console.log(pivotAfter)
@@ -133,6 +147,9 @@ class Sorter extends React.Component {
                 break
             case 'QUICK':
                 this.playbackQuick(createPromise)
+                break
+            case 'GRAVITY':
+                this.playbackGravity(createPromise)
                 break
             default:
         }

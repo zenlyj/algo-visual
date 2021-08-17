@@ -20,6 +20,7 @@ class MenuBar extends React.Component{
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('BUBBLE')}> Bubble Sort </button></NavDropdown.Item>
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('MERGE')}> Merge Sort </button></NavDropdown.Item>
                             <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('QUICK')}> Quick Sort </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('GRAVITY')}> Gravity Sort </button></NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link> 
                             <button className='nav_bar_item' onClick={()=> {this.props.isRunning ? this.props.pause() : this.props.start()}}> 

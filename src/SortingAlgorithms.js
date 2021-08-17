@@ -142,6 +142,48 @@ const partition = (pivots, diagram, scan, arr, left, right) => {
     return i+1
 }
 
+export const gravitySort = (arr) => {
+    const abacus = []
+    const diagram = []
+    const sorted = []
+    diagram.push(arr.slice(0, arr.length))
+    let max = Number.MIN_VALUE
+    for (let i = 0; i < arr.length; i++) {
+        sorted[i] = i
+        if (arr[i] > max) max = arr[i]
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+        const abacusRow = []
+        for (let j = 0; j < max; j++) {
+            abacusRow.push(j < arr[i] ? 1 : 0)
+        }
+        abacus.push(abacusRow)
+    }
+
+    let isDone = false
+    while (!isDone) {
+        isDone = true
+        for (let i = 0; i < abacus.length-1; i++) {
+            for (let j = 0; j < max; j++) {
+                if (abacus[i][j] === 1 && abacus[i+1][j] === 0) {
+                    abacus[i][j] = 0
+                    abacus[i+1][j] = 1
+                    isDone = false
+                }
+            }
+        }
+        const diagramState = []
+        for (let i = 0; i < abacus.length; i++) {
+            const row = abacus[i]
+            diagramState.push(row.reduce((accumulated, currentVal) => accumulated + currentVal))
+        }
+        diagram.push(diagramState)
+    }
+
+    return new SortBuffer(diagram, sorted, null, null)
+}
+
 const swap = (arr, x, y) => {
     const temp = arr[x]
     arr[x] = arr[y]
