@@ -8,7 +8,7 @@ class Sorter extends React.Component {
         super()
         this.state = {
             isRunning:false,
-            selectedAlgo:'',
+            selectedAlgo:null,
             array:[],
             sorted:new Set(),
             arraySize:50,
@@ -136,19 +136,19 @@ class Sorter extends React.Component {
             })
         }
         switch(this.state.selectedAlgo) {
-            case 'SELECTION':
+            case 'SELECTION SORT':
                 this.playbackSelection(createPromise)
                 break
-            case 'BUBBLE':
+            case 'BUBBLE SORT':
                 this.playbackBubble(createPromise)
                 break
-            case 'MERGE':
+            case 'MERGE SORT':
                 this.playbackMerge(createPromise)
                 break
-            case 'QUICK':
+            case 'QUICK SORT':
                 this.playbackQuick(createPromise)
                 break
-            case 'GRAVITY':
+            case 'GRAVITY SORT':
                 this.playbackGravity(createPromise)
                 break
             default:
@@ -158,7 +158,7 @@ class Sorter extends React.Component {
     render() {
         return (
             <div>
-                <SortingMenuBar setAlgo={this.setAlgo} generateRandomArray={this.generateRandomArray} start={this.start}/>
+                <SortingMenuBar selectedAlgo={this.state.selectedAlgo} setAlgo={this.setAlgo} generateRandomArray={this.generateRandomArray} start={this.start}/>
                 <SortChart array={this.state.array} sorted={this.state.sorted} scanElement={this.state.scanElement} pivotBefore={this.state.pivotBefore} pivotAfter={this.state.pivotAfter}/>
             </div>
         )

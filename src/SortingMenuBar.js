@@ -15,12 +15,12 @@ class MenuBar extends React.Component{
                                     RANDOMIZE ARRAY
                             </button> 
                         </Nav.Link>
-                        <NavDropdown title="SELECT ALGORITHM">
-                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('SELECTION')}> Selection Sort </button></NavDropdown.Item>
-                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('BUBBLE')}> Bubble Sort </button></NavDropdown.Item>
-                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('MERGE')}> Merge Sort </button></NavDropdown.Item>
-                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('QUICK')}> Quick Sort </button></NavDropdown.Item>
-                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('GRAVITY')}> Gravity Sort </button></NavDropdown.Item>
+                        <NavDropdown title={this.props.selectedAlgo === null ? "SELECT ALGO" : this.props.selectedAlgo}>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('SELECTION SORT')}> Selection Sort </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('BUBBLE SORT')}> Bubble Sort </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('MERGE SORT')}> Merge Sort </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('QUICK SORT')}> Quick Sort </button></NavDropdown.Item>
+                            <NavDropdown.Item> <button className='drop_down_item' onClick={()=>this.props.setAlgo('GRAVITY SORT')}> Gravity Sort </button></NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link> 
                             <button className='nav_bar_item' onClick={()=> {this.props.isRunning ? this.props.pause() : this.props.start()}}> 
