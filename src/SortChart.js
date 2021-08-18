@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { BarChart, Bar, Cell, ResponsiveContainer } from 'recharts';
 
 const generateData = (array) => {
-  console.log(array)
   let data = array.map(x => {
     return {value:x}
   })
@@ -28,7 +27,7 @@ export default class SortChart extends React.Component {
             bottom: 20,
           }}
         >
-          <Bar dataKey="value" fill={"#8884d8"} label={{position:'bottom'}}>
+          <Bar isAnimationActive={false} dataKey="value" fill={"#8884d8"} label={{position:'bottom'}}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={this.props.pivotBefore === index ? colors[4] : this.props.pivotAfter === index ? colors[3] : this.props.sorted.has(index) ? colors[0] : index === this.props.scanElement ? colors[2] : colors[1]} />
             ))}

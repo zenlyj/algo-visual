@@ -1,7 +1,17 @@
 .nav_bar_item {
-    color:grey;
+    color:#9c9c9c;
     border:none;
     background:none;
+    padding-top:10px;
+    padding-left:50px;
+    padding-right:50px;
+}
+
+.nav_bar_dropdown {
+    color:#9c9c9c;
+    padding-top:10px;
+    padding-left:50px;
+    padding-right:50px;
 }
 
 .drop_down_item {

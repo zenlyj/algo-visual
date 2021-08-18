@@ -5,7 +5,6 @@ export const selectionSort = (arr) => {
     let diagram = []
     let scan = []
     let unsorted = arr.slice(0, arr.length)
-    diagram.push(arr)
     for (let i = 0; i < arr.length; i++) {
         let min = unsorted[i]
         let idx = i
@@ -57,6 +56,7 @@ export const mergeSort = (arr) => {
     const sorted = []
     mergeSortHelper(diagram, scan, res, 0, arr.length-1)
     for (let i = 0; i < arr.length; i++) sorted.push(i)
+    console.log(sorted)
     return new SortBuffer(diagram, sorted, scan)
 }
 
