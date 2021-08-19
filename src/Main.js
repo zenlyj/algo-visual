@@ -8,7 +8,7 @@ class Main extends React.Component {
         super()
         this.state = {
             pathFind:false,
-            sorting:true
+            sorting:false
         }
     }
 
@@ -16,8 +16,14 @@ class Main extends React.Component {
         if (!this.state.pathFind && !this.state.sorting) {
             return (
                 <div>
+                <div>
                     Path Finding Algorithms
                     <Button variant="outline-secondary" onClick={()=>this.setState({pathFind:true})}> GO </Button>
+                </div>
+                <div>
+                    Sorting Algorithms
+                    <Button variant="outline-secondary" onClick={()=>this.setState({sorting:true})}> GO </Button>
+                </div>
                 </div>
             )
         } else if (this.state.pathFind) {

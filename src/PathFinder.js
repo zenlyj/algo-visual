@@ -21,10 +21,11 @@ class PathFinder extends React.Component {
             gridSize:{numRows:25, numCols:45},
             isUpdateSourceNodeMode:false,
             isUpdateTargetNodeMode:false,
-            selectedAlgo:'',
+            selectedAlgo:null,
             isDrawingMode:false,
-            selectedWallType:'',
-            isRunning:false
+            selectedWallType:'NON-PASSABLE WALL',
+            isRunning:false,
+            delay:100
         }
         this.updateSourceNode = this.updateSourceNode.bind(this)
         this.setUpdateSourceNodeMode = this.setUpdateSourceNodeMode.bind(this)
@@ -41,6 +42,7 @@ class PathFinder extends React.Component {
         this.start = this.start.bind(this)
         this.clearVisuals = this.clearVisuals.bind(this)
         this.generateMaze = this.generateMaze.bind(this)
+        this.setDelay = this.setDelay.bind(this)
     }
 
     updateSourceNode(sourceNode) {
@@ -69,13 +71,13 @@ class PathFinder extends React.Component {
     bufferAlgo() {
         let buffer = null
         switch(this.state.selectedAlgo) {
-            case 'BFS':
+            case 'BREADTH-FIRST SEARCH':
                 buffer = bfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
-            case 'DFS':
+            case 'DEPTH-FIRST SEARCH':
                 buffer = dfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
-            case 'DIJKSTRA':
+            case 'DIJKSTRA\'S SHORTEST PATH':
                 buffer = dijkstra(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
                 break
             case 'ASTAR':
@@ -108,11 +110,12 @@ class PathFinder extends React.Component {
                 setTimeout(() => {
                     this.setState({visitedNodes:visitedNodes, pathToTarget:pathToTarget})
                     resolve();
-                }, 10)
+                }, this.state.delay)
             })
         }
         this.setState({isRunning:true}, async ()=> {
             while (this.state.isRunning) {
+                console.log('asd')
                 if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
                     this.setState({isRunning:false})
                     break
@@ -139,9 +142,9 @@ class PathFinder extends React.Component {
 
     updateDrawnNodes(nodeIndex) {
         if (this.state.isRunning) return;
-        let updatedWallNodes = this.state.selectedWallType === 'UNPASSABLE' ? new Set(this.state.wallNodes) : new Set(this.state.weakWallNodes)
+        let updatedWallNodes = this.state.selectedWallType === 'NON-PASSABLE WALL' ? new Set(this.state.wallNodes) : new Set(this.state.weakWallNodes)
         updatedWallNodes.add(gridIdx(nodeIndex, this.state.gridSize.numCols))
-        let updatedState = this.state.selectedWallType === 'UNPASSABLE' ? {wallNodes:updatedWallNodes} : {weakWallNodes:updatedWallNodes}
+        let updatedState = this.state.selectedWallType === 'NON-PASSABLE WALL' ? {wallNodes:updatedWallNodes} : {weakWallNodes:updatedWallNodes}
         this.setState(updatedState)
     }
 
@@ -157,13 +160,17 @@ class PathFinder extends React.Component {
         this.setState({selectedWallType:wallType})
     }
 
+    setDelay(delay) {
+        this.setState({delay:delay})
+    }
+
     async generateMaze() {
         const createPromise = (wallNodes) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     this.setState({wallNodes:wallNodes})
                     resolve();
-                }, 10)
+                }, this.state.delay)
             })
         }
         const res = mazeRecursiveDiv(this.state.gridSize, this.state.sourceNode, this.state.targetNode)
@@ -188,7 +195,7 @@ class PathFinder extends React.Component {
         }
         return (
             <div>
-                <MenuBar genMaze={this.generateMaze} setAlgo={this.setAlgo} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning}/>
+                <MenuBar genMaze={this.generateMaze} setAlgo={this.setAlgo} setDelay={this.setDelay} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning} delay={this.state.delay} selectedAlgo={this.state.selectedAlgo} selectedWallType={this.state.selectedWallType}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )

@@ -28,10 +28,39 @@
     width:30px;
 }
 
+@keyframes visitedAnimation {
+    0% {
+      transform: scale(0.3);
+      background-color: #98ff98;
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: #b2f0ab;
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: #c6e1bd;
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: #c6e1bd;
+    }
+  }
+
 .visited_node {
-    background-color:yellowgreen;
     height:30px;
     width:30px;
+    animation-name: visitedAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 
 .path_node {

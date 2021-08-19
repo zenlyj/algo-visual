@@ -244,7 +244,6 @@ class Sorter extends React.Component {
     }
 
     render() {
-        console.log(this.state.delay)
         const pivotBefore = (this.state.pivot !== null && this.state.pivot.isBefore) ? this.state.pivot.before : null
         const pivotAfter = (this.state.pivot !== null && !this.state.pivot.isBefore) ? this.state.pivot.after : null
         return (

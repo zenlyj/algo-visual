@@ -1,7 +1,7 @@
 import React from 'react'
-import 'bootstrap/dist/css/bootstrap.css'; // or include from a CDN
-import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
-import RangeSlider from 'react-bootstrap-range-slider';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
+import RangeSlider from 'react-bootstrap-range-slider'
 import { Nav, NavDropdown } from 'react-bootstrap'
 import NavBar from 'react-bootstrap/NavBar'
 import './MenuBar.css'
