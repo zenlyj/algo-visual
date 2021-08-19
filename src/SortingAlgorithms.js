@@ -7,19 +7,18 @@ export const selectionSort = (arr) => {
     let unsorted = arr.slice(0, arr.length)
     for (let i = 0; i < arr.length; i++) {
         let min = unsorted[i]
-        let idx = i
-        let scanThru = []
+        let minIdx = i
         for (let j = i; j < arr.length; j++) {
-            scanThru.push(j)
+            scan.push(j)
             if (unsorted[j] < min) {
                 min = unsorted[j]
-                idx = j
+                minIdx = j
             }
         }
-        scan.push(scanThru)
+        scan.push(null)
         sorted.push(i)
         unsorted = unsorted.slice(0, arr.length)
-        swap(unsorted, i, idx)
+        swap(unsorted, i, minIdx)
         diagram.push(unsorted)
     }
     return new SortBuffer(diagram,sorted,scan)
@@ -31,18 +30,16 @@ export const bubbleSort = (arr) => {
     let scan = []
     let unsorted = arr.slice(0, arr.length)
     for (let i = 0; i < arr.length-1; i++) {
-        const scanThru = []
-        const diagramFrame = []
+        diagram.push(unsorted.slice(0, arr.length))
         for (let j = 0; j < arr.length-1-i; j++) {
-            scanThru.push(j)
+            scan.push(j)
             if (unsorted[j] > unsorted[j+1]) {
                 swap(unsorted, j, j+1)
             }
-            diagramFrame.push(unsorted)
+            diagram.push(unsorted)
             unsorted = unsorted.slice(0, arr.length)
         }
-        scan.push(scanThru)
-        diagram.push(diagramFrame)
+        scan.push(null)
         sorted.push(arr.length-1-i)
     }
     sorted.push(0)
@@ -56,7 +53,6 @@ export const mergeSort = (arr) => {
     const sorted = []
     mergeSortHelper(diagram, scan, res, 0, arr.length-1)
     for (let i = 0; i < arr.length; i++) sorted.push(i)
-    console.log(sorted)
     return new SortBuffer(diagram, sorted, scan)
 }
 
@@ -85,9 +81,9 @@ const merge = (diagram, scan, arr, left, right, mid) => {
     let i = 0
     let j = 0
     let k = left
-    const scanThru = []
+
     while (i < tempLeft.length && j < tempRight.length) {
-        scanThru.push(k)
+        scan.push(k)
         if (tempLeft[i] < tempRight[j]) {
             arr[k++] = tempLeft[i++]
         } else {
@@ -96,15 +92,15 @@ const merge = (diagram, scan, arr, left, right, mid) => {
     }
 
     while (i < tempLeft.length) {
-        scanThru.push(k)
+        scan.push(k)
         arr[k++] = tempLeft[i++]
     }
     while (j < tempRight.length) {
-        scanThru.push(k)
+        scan.push(k)
         arr[k++] = tempRight[j++]
     }
     diagram.push(arr.slice(0, arr.length))
-    scan.push(scanThru)
+    scan.push(null)
 }
 
 export const quickSort = (arr) => {
@@ -128,17 +124,16 @@ const quickSortHelper = (pivots, diagram, scan, arr, left, right) => {
 const partition = (pivots, diagram, scan, arr, left, right) => {
     const pivot = arr[right]
     let i = left - 1
-    const scanThru = []
     for (let j = left; j < right; j++) {
-        scanThru.push(j)
+        scan.push(j)
         if (arr[j] < pivot) {
             swap(arr, ++i, j)
         }
     }
     swap(arr, i+1, right)
     diagram.push(arr.slice(0, arr.length))
-    scan.push(scanThru)
-    pivots.push({before:right, after:i+1})
+    scan.push(null)
+    pivots.push({before:right, after:i+1, isBefore:true})
     return i+1
 }
 

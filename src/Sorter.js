@@ -13,8 +13,7 @@ class Sorter extends React.Component {
             sorted:new Set(),
             arraySize:50,
             scanElement:null,
-            pivotBefore:null,
-            pivotAfter:null,
+            pivot:null,
             delay:100,
             buffer:null
         }
@@ -45,12 +44,12 @@ class Sorter extends React.Component {
         for (let i = 0; i < this.state.arraySize; i++) {
             arr.push(this.randInt(this.state.arraySize/4, this.state.arraySize))
         }
-        this.setState({array:arr, buffer:null, sorted:new Set(), scanElement:null, pivotBefore:null, pivotAfter:null})
+        this.setState({array:arr, buffer:null, sorted:new Set(), scanElement:null, pivot:null})
     }
 
     setAlgo(algo) {
         if (this.state.isRunning) return
-        this.setState({selectedAlgo:algo, buffer:null, sorted:new Set(), scanElement:null, pivotBefore:null, pivotAfter:null})
+        this.setState({selectedAlgo:algo, buffer:null, sorted:new Set(), scanElement:null, pivot:null})
     }
 
     async cleanup() {
@@ -74,14 +73,13 @@ class Sorter extends React.Component {
                 break
             }
 
-            const scan = buffer.consumeScan()
-            const diagram = buffer.consumeDiagram()
-
-            for (let i = 0; i < scan.length; i++) {
-                await(createPromise(this.state.delay, this.state.array, sortedSet, scan[i], null, null))
+            const scanElement = buffer.consumeScan()
+            let diagram = this.state.array
+            if (scanElement === null) {
+                diagram = buffer.consumeDiagram()
+                sortedSet.add(buffer.consumeSorted())
             }
-            sortedSet.add(buffer.consumeSorted())
-            await(createPromise(this.state.delay, diagram, sortedSet, null, null, null))
+            await(createPromise(this.state.delay, diagram, sortedSet, scanElement, null))
         }
     }
 
@@ -94,20 +92,19 @@ class Sorter extends React.Component {
                 break
             }
 
-            const scan = buffer.consumeScan()
-            const diagram = buffer.consumeDiagram()
+            const scanElement = buffer.consumeScan()
+            const diagramFrame = buffer.consumeDiagram()
+            console.log(scanElement, diagramFrame)
 
-            if (scan === undefined && diagram === undefined) {
+            if ((scanElement === undefined || scanElement === null) && (diagramFrame === undefined || diagramFrame === null)) {
                 sortedSet.add(buffer.consumeSorted())
-                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null, null))
+                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null))
                 continue
             }
-
-            for (let i = 0; i < scan.length; i++) {
-                await(createPromise(this.state.delay, diagram[i], sortedSet, scan[i], null, null))
+            if (scanElement === null) {
+                sortedSet.add(buffer.consumeSorted())
             }
-            sortedSet.add(buffer.consumeSorted())
-            await(createPromise(this.state.delay, diagram[scan.length-1], sortedSet, null, null, null))
+            await(createPromise(this.state.delay, diagramFrame, sortedSet, scanElement, null))
         }
     }
 
@@ -119,18 +116,14 @@ class Sorter extends React.Component {
                 this.cleanup()
                 break
             }
+            const scanElement = buffer.consumeScan()
 
-            const diagram = buffer.consumeDiagram()
-            const scanThru = buffer.consumeScan()
-            
-            if (diagram === undefined && scanThru === undefined) {
+            if (scanElement === undefined) {
                 for (let j = 0; j < this.state.array.length; j++) sortedSet.add(buffer.consumeSorted())
-                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null, null))
+                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null))
             } else {
-                for (let j = 0; j < scanThru.length; j++) {
-                    await(createPromise(this.state.delay, this.state.array, sortedSet, scanThru[j], null, null))
-                }
-                await(createPromise(this.state.delay, diagram, sortedSet, null, null, null))
+                const diagram = scanElement === null ? buffer.consumeDiagram() : this.state.array
+                await(createPromise(this.state.delay, diagram, sortedSet, scanElement, null))
             }
         }
     }
@@ -138,23 +131,34 @@ class Sorter extends React.Component {
     async playbackQuick(createPromise) {
         const buffer = this.state.buffer
         const sortedSet = this.state.sorted
+        let pivot = this.state.pivot
+        let toRefreshPivot = (this.state.pivot === null || !this.state.pivot.isBefore) ? true : false
+        let isStart = true
         while (this.state.isRunning) {
             if (buffer.isEmpty()) {
                 this.cleanup()
                 break
             }
+            if (toRefreshPivot) {
+                pivot = buffer.consumePivots()  
+                if (pivot === undefined) pivot = null
+                const delay = isStart ? this.state.delay : this.state.delay*10
+                isStart = false
+                await(createPromise(delay, this.state.array, sortedSet, null, pivot))
+                toRefreshPivot = false
+                continue
+            }
 
-            const diagram = buffer.consumeDiagram()
-            const scanThru = buffer.consumeScan()
-            const pivot = buffer.consumePivots()
-            if (diagram === undefined) { 
-                for (let i = 0; i < this.state.array.length; i++) 
-                    sortedSet.add(buffer.consumeSorted())
-                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null, null))
+            const scanElement = buffer.consumeScan()
+            if (scanElement === undefined) { 
+                for (let i = 0; i < this.state.array.length; i++) sortedSet.add(buffer.consumeSorted())
+                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null))
+            } else if (scanElement === null) {
+                const pivotAfter = {before:pivot.before, after:pivot.after, isBefore:false}
+                await(createPromise(this.state.delay, buffer.consumeDiagram(), sortedSet, null, pivotAfter))
+                toRefreshPivot = true
             } else {
-                for (let i = 0; i < scanThru.length; i++) 
-                    await(createPromise(i === 0 ? this.state.delay*20 : this.state.delay, this.state.array, sortedSet, scanThru[i], pivot.before, null))
-                await(createPromise(this.state.delay, diagram, sortedSet, null, null, pivot.after))
+                await(createPromise(this.state.delay, this.state.array, sortedSet, scanElement, pivot))
             }
         }
     }
@@ -171,9 +175,9 @@ class Sorter extends React.Component {
             const diagram = buffer.consumeDiagram()
             if (diagram === undefined) {
                 for (let i = 0; i < this.state.array.length; i++) sortedSet.add(buffer.consumeSorted())
-                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null, null))
+                await(createPromise(this.state.delay, this.state.array, sortedSet, null, null))
             } else {
-                await(createPromise(this.state.delay, diagram, sortedSet, null, null, null))
+                await(createPromise(this.state.delay, diagram, sortedSet, null, null))
             }
         }
     }
@@ -202,10 +206,10 @@ class Sorter extends React.Component {
     }
 
     start() {
-        const createPromise = (delay, array, sorted, scanElement, pivotBefore, pivotAfter) => {
+        const createPromise = (delay, array, sorted, scanElement, pivot) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    this.setState({array:array, sorted:sorted, scanElement:scanElement, pivotBefore:pivotBefore, pivotAfter:pivotAfter})
+                    this.setState({array:array, sorted:sorted, scanElement:scanElement, pivot:pivot})
                     resolve();
                 }, delay)
             })
@@ -240,10 +244,12 @@ class Sorter extends React.Component {
     }
 
     render() {
+        const pivotBefore = (this.state.pivot !== null && this.state.pivot.isBefore) ? this.state.pivot.before : null
+        const pivotAfter = (this.state.pivot !== null && !this.state.pivot.isBefore) ? this.state.pivot.after : null
         return (
             <div>
                 <SortingMenuBar isRunning={this.state.isRunning} selectedAlgo={this.state.selectedAlgo} delay={this.state.delay} setAlgo={this.setAlgo} generateRandomArray={this.generateRandomArray} start={this.start} pause={this.pause} setDelay={this.setDelay}/>
-                <SortChart array={this.state.array} sorted={this.state.sorted} scanElement={this.state.scanElement} pivotBefore={this.state.pivotBefore} pivotAfter={this.state.pivotAfter}/>
+                <SortChart array={this.state.array} sorted={this.state.sorted} scanElement={this.state.scanElement} pivotBefore={pivotBefore} pivotAfter={pivotAfter}/>
             </div>
         )
     }
