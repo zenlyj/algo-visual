@@ -33,13 +33,13 @@ class MenuBar extends React.Component{
                         <div className='nav_bar_item'>
                             SPEED
                             <RangeSlider 
-                                value={(150 - this.props.delay)/10}
+                                value={(300 - this.props.delay)/50}
                                 onChange={changeEvent => {
-                                    const delay = 150 - changeEvent.target.value * 10 
+                                    const delay = 300 - (changeEvent.target.value*50)
                                     this.props.setDelay(delay)}
                                 }
                                 min={1}
-                                max={10}                              
+                                max={5}                              
                             />
                         </div>
                     </Nav>
