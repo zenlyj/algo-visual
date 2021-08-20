@@ -1,11 +1,11 @@
 import React from 'react'
 import Grid from './components/Grid'
-import MenuBar from './components/MenuBar'
 import {astar, bfs, dfs, dijkstra} from './util/GraphAlgorithms'
 import './components/Grid.css'
 import {gridIdx} from './util/GridDraw'
 import Buffer from './util/Buffer'
 import {mazeRecursiveDiv} from './util/MazeGenerationAlgorithms'
+import FunctionBar from './components/FunctionBar'
 
 class PathFinder extends React.Component {
     constructor() {
@@ -71,13 +71,13 @@ class PathFinder extends React.Component {
     bufferAlgo() {
         let buffer = null
         switch(this.state.selectedAlgo) {
-            case 'BREADTH-FIRST SEARCH':
+            case 'BFS':
                 buffer = bfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
-            case 'DEPTH-FIRST SEARCH':
+            case 'DFS':
                 buffer = dfs(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes)
                 break
-            case 'DIJKSTRA\'S SHORTEST PATH':
+            case 'DIJKSTRA':
                 buffer = dijkstra(this.state.sourceNode, this.state.targetNode, this.state.gridSize, this.state.wallNodes, this.state.weakWallNodes)
                 break
             case 'ASTAR':
@@ -194,7 +194,7 @@ class PathFinder extends React.Component {
         }
         return (
             <div>
-                <MenuBar genMaze={this.generateMaze} setAlgo={this.setAlgo} setDelay={this.setDelay} start={this.start} pause={this.pausePlayback} reset={this.reset} clearVisuals={this.clearVisuals} setWallType={this.setWallType} isRunning={this.state.isRunning} delay={this.state.delay} selectedAlgo={this.state.selectedAlgo} selectedWallType={this.state.selectedWallType}/>
+                <FunctionBar genMaze={this.generateMaze} setAlgo={this.setAlgo} setDelay={this.setDelay} start={this.start} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning} delay={this.state.delay}/>
                 <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
             </div>
         )

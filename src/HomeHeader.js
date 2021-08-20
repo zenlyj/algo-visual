@@ -8,9 +8,9 @@ class HomeHeader extends React.Component {
 
     render() {
         return (
-            <div class="header">
-                <a href="#default" class="logo">ALGORITHMS VISUALIZER</a>
-                <div class="header-right">
+            <div className="header">
+                <a href="#default" className="logo">ALGORITHMS VISUALIZER</a>
+                <div className="header-right">
                     <a href="#home">HOW TO USE</a>
                     <a href="https://github.com/zenlyj/algo-visualizer" target="_blank">VIEW ON GITHUB</a>
                 </div>
