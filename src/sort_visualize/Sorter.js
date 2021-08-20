@@ -1,7 +1,7 @@
 import React from 'react'
-import SortChart from './SortChart'
-import SortingMenuBar from './SortingMenuBar'
-import {bubbleSort, mergeSort, quickSort, selectionSort, gravitySort} from './SortingAlgorithms'
+import SortChart from './components/SortChart'
+import SortingMenuBar from './components/SortingMenuBar'
+import {bubbleSort, mergeSort, quickSort, selectionSort, gravitySort} from './util/SortingAlgorithms'
 
 class Sorter extends React.Component {
     constructor() {

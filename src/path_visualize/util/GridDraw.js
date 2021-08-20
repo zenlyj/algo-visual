@@ -1,5 +1,5 @@
 import React from 'react'
-import Node from './Node'
+import Node from '../components/Node'
 
 export const gridIdx = (node, numCols) => {
     return ((node.x-1) * numCols) + (node.y-1)

@@ -1,5 +1,5 @@
 import React from 'react'
-import './Grid.css';
+import '../components/Grid.css';
 import Fade from 'react-bootstrap/Fade'
 
 class Node extends React.Component{

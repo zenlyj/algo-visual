@@ -1,6 +1,6 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
-import {draw} from './GridDraw'
+import {draw} from '../util/GridDraw'
 
 class Grid extends React.Component {
     render() {

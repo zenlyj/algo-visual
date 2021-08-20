@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BarChart, Bar, Cell, ResponsiveContainer } from 'recharts';
 
 const generateData = (array) => {

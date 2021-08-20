@@ -1,6 +1,6 @@
 import React from 'react'
-import PathFinder from './PathFinder'
-import Sorter from './Sorter'
+import PathFinder from './path_visualize/PathFinder'
+import Sorter from './sort_visualize/Sorter'
 import Button from 'react-bootstrap/Button'
 
 class Main extends React.Component {
@@ -13,10 +13,10 @@ class Main extends React.Component {
     }
 
     render() {
-        if (!this.state.pathFind && !this.state.sorting) {
-            return (
-                <div>
-                <div>
+        return (
+        (!this.state.pathFind && !this.state.sorting) ?
+                (<body style={{height:'100vh', background:'black'}}>
+                <div style={{background:'inherit'}}>
                     Path Finding Algorithms
                     <Button variant="outline-secondary" onClick={()=>this.setState({pathFind:true})}> GO </Button>
                 </div>
@@ -24,13 +24,11 @@ class Main extends React.Component {
                     Sorting Algorithms
                     <Button variant="outline-secondary" onClick={()=>this.setState({sorting:true})}> GO </Button>
                 </div>
-                </div>
-            )
-        } else if (this.state.pathFind) {
-            return <PathFinder />
-        } else if (this.state.sorting) {
-            return <Sorter />
-        }
+                </body>) :
+        (this.state.pathFind) ? 
+            (<PathFinder />) : 
+        (this.state.sorting) ?
+            (<Sorter />) : null)
     }
 }
 

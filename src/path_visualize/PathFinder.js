@@ -1,11 +1,11 @@
 import React from 'react'
-import Grid from './Grid'
-import MenuBar from './MenuBar'
-import {astar, bfs, dfs, dijkstra} from './Algorithm'
-import './Grid.css'
-import {gridIdx} from './GridDraw'
-import Buffer from './Buffer'
-import {mazeRecursiveDiv} from './MazeGenerator'
+import Grid from './components/Grid'
+import MenuBar from './components/MenuBar'
+import {astar, bfs, dfs, dijkstra} from './util/GraphAlgorithms'
+import './components/Grid.css'
+import {gridIdx} from './util/GridDraw'
+import Buffer from './util/Buffer'
+import {mazeRecursiveDiv} from './util/MazeGenerationAlgorithms'
 
 class PathFinder extends React.Component {
     constructor() {
