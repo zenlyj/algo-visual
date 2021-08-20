@@ -2,6 +2,8 @@ import React from 'react'
 import PathFinder from './path_visualize/PathFinder'
 import Sorter from './sort_visualize/Sorter'
 import Button from 'react-bootstrap/Button'
+import './Main.css'
+import HomeHeader from './HomeHeader'
 
 class Main extends React.Component {
     constructor() {
@@ -12,11 +14,10 @@ class Main extends React.Component {
         }
     }
 
-    render() {
+    getHomePage() {
         return (
-        (!this.state.pathFind && !this.state.sorting) ?
-                (<body style={{height:'100vh', background:'black'}}>
-                <div style={{background:'inherit'}}>
+            <div>
+                <div>
                     Path Finding Algorithms
                     <Button variant="outline-secondary" onClick={()=>this.setState({pathFind:true})}> GO </Button>
                 </div>
@@ -24,11 +25,22 @@ class Main extends React.Component {
                     Sorting Algorithms
                     <Button variant="outline-secondary" onClick={()=>this.setState({sorting:true})}> GO </Button>
                 </div>
-                </body>) :
-        (this.state.pathFind) ? 
-            (<PathFinder />) : 
-        (this.state.sorting) ?
-            (<Sorter />) : null)
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div>
+                <HomeHeader />
+                <div className={'app_container'}> 
+                    {this.state.pathFind ? <PathFinder />
+                        : this.state.sorting ? <Sorter />
+                        : this.getHomePage()
+                    }
+                </div>
+            </div>
+        )
     }
 }
 

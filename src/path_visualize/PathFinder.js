@@ -115,7 +115,6 @@ class PathFinder extends React.Component {
         }
         this.setState({isRunning:true}, async ()=> {
             while (this.state.isRunning) {
-                console.log('asd')
                 if (this.state.buffer.visitedIsEmpty() && this.state.buffer.pathIsEmpty()) {
                     this.setState({isRunning:false})
                     break
