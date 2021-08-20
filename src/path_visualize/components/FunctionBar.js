@@ -12,7 +12,7 @@ class FunctionBar extends React.Component {
     render() {
         return (
             <div className="button_container">
-                <button> 
+                <button onClick={()=>this.props.genMaze()}> 
                     GENERATE MAZE 
                 </button>
                 <select onChange={(event)=>this.props.setAlgo(event.target.value)}>
@@ -21,9 +21,9 @@ class FunctionBar extends React.Component {
                     <option value="DIJKSTRA"> DIJKSTRA'S ALGORITHM </option>
                     <option value="ASTAR"> ASTAR (MANHATTAN) </option>
                 </select>
-                <select>
-                    <option> NON-PASSABLE WALL </option>
-                    <option> WEAK WALL - WEIGHT 50</option>
+                <select onChange={(event)=>this.props.setWallType(event.target.value)}>
+                    <option value="NON-PASSABLE WALL"> NON-PASSABLE WALL </option>
+                    <option value="WEAK WALL"> WEAK WALL - WEIGHT 50</option>
                 </select>
                 <button onClick={()=>this.props.isRunning ? this.props.pause() : this.props.start()}>
                     {this.props.isRunning ? 'PAUSE' : 'RUN'}

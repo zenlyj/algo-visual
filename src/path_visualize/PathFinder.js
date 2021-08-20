@@ -156,6 +156,7 @@ class PathFinder extends React.Component {
     }
 
     setWallType(wallType) {
+        console.log(wallType)
         this.setState({selectedWallType:wallType})
     }
 

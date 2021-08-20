@@ -1,6 +1,6 @@
 .table_container {
     width:100%;
-    padding: 100px
+    padding:30px;
 }
 
 .default {
@@ -9,21 +9,13 @@
 }
 
 .source_node {
-    background-color: green;
+    background-color:white;
     height:30px;
     width:30px;
 }
 
-.node_btn {
-    padding:0px;
-    height:100%;
-    width:100%;
-    border:none;
-    background:none;
-}
-
 .target_node {
-    background-color: red;
+    background-color:black;
     height:30px;
     width:30px;
 }
@@ -31,30 +23,30 @@
 @keyframes visitedAnimation {
     0% {
       transform: scale(0.3);
-      background-color: yellow;
+      background-color: #ff6c6c ;
       border-radius: 100%;
     }
   
     50% {
-      background-color: #b2f0ab;
+      background-color: #ffbbbb;
     }
   
     75% {
       transform: scale(1.2);
-      background-color: #c6e1bd;
+      background-color: #ff5959;
     }
   
     100% {
       transform: scale(1);
-      background-color: #c6e1bd;
+      background-color: #670009;
     }
-  }
+}
 
 .visited_node {
     height:30px;
     width:30px;
     animation-name: visitedAnimation;
-    animation-duration: 1s;
+    animation-duration: 1.5s;
     animation-timing-function: ease-out;
     animation-delay: 0;
     animation-direction: alternate;
@@ -63,21 +55,45 @@
     animation-play-state: running;
 }
 
+@keyframes pathAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: #c5c6c7;
+    border-radius: 100%;
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: #c5c6c7;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #c5c6c7;
+  }
+}
+
 .path_node {
-    background-color:purple;
     height:30px;
     width:30px;
+    animation-name: pathAnimation;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
 }
 
 .wall_node {
-    background-color:black;
+    background-color:#da8d00;
     height:30px;
     width:30px;
 }
 
 .weak_wall_node {
-    background-color: blue;
+    background-color:#b3b000;
     height:30px;
     width:30px;
-    opacity: 0.5;
 }

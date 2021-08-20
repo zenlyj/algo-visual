@@ -1,6 +1,5 @@
 import React from 'react'
 import '../components/Grid.css';
-import Fade from 'react-bootstrap/Fade'
 
 class Node extends React.Component{
     constructor() {
@@ -73,14 +72,6 @@ class Node extends React.Component{
 
     render() {
         const background = this.getNodeBackground()
-        // return (<Fade in={background === 'default' ? false : true} timeout={5}>
-        //             <td className={background}
-        //                 onMouseDown={(e)=>this.mouseDownHandler(e)}
-        //                 onMouseUp={(e)=>this.mouseUpHandler()}
-        //                 onMouseEnter={(e)=>this.mouseEnterHandler()} 
-        //             >
-        //             </td>
-        //         </Fade>
         return (
                 <td className={background}
                 onMouseDown={(e)=>this.mouseDownHandler(e)}
