@@ -1,6 +1,6 @@
 import React from 'react'
 import SortChart from './components/SortChart'
-import SortingMenuBar from './components/SortingMenuBar'
+import FunctionBar from './components/SortFunctionBar'
 import {bubbleSort, mergeSort, quickSort, selectionSort, gravitySort} from './util/SortingAlgorithms'
 
 class Sorter extends React.Component {
@@ -48,6 +48,7 @@ class Sorter extends React.Component {
     }
 
     setAlgo(algo) {
+        console.log(algo)
         if (this.state.isRunning) return
         this.setState({selectedAlgo:algo, buffer:null, sorted:new Set(), scanElement:null, pivot:null})
     }
@@ -185,19 +186,19 @@ class Sorter extends React.Component {
     bufferAlgo() {
         let buffer = null
         switch(this.state.selectedAlgo) {
-            case 'SELECTION SORT':
+            case 'SELECTION':
                 buffer = selectionSort(this.state.array)
                 break
-            case 'BUBBLE SORT':
+            case 'BUBBLE':
                 buffer = bubbleSort(this.state.array)
                 break
-            case 'MERGE SORT':
+            case 'MERGE':
                 buffer = mergeSort(this.state.array)
                 break
-            case 'QUICK SORT':
+            case 'QUICK':
                 buffer = quickSort(this.state.array)
                 break
-            case 'GRAVITY SORT':
+            case 'GRAVITY':
                 buffer = gravitySort(this.state.array)
                 break
             default:
@@ -219,19 +220,19 @@ class Sorter extends React.Component {
         }
         this.setState({isRunning:true}, ()=> {
             switch(this.state.selectedAlgo) {
-                case 'SELECTION SORT':
+                case 'SELECTION':
                     this.playbackSelection(createPromise)
                     break
-                case 'BUBBLE SORT':
+                case 'BUBBLE':
                     this.playbackBubble(createPromise)
                     break
-                case 'MERGE SORT':
+                case 'MERGE':
                     this.playbackMerge(createPromise)
                     break
-                case 'QUICK SORT':
+                case 'QUICK':
                     this.playbackQuick(createPromise)
                     break
-                case 'GRAVITY SORT':
+                case 'GRAVITY':
                     this.playbackGravity(createPromise)
                     break
                 default:
@@ -248,7 +249,7 @@ class Sorter extends React.Component {
         const pivotAfter = (this.state.pivot !== null && !this.state.pivot.isBefore) ? this.state.pivot.after : null
         return (
             <div>
-                <SortingMenuBar isRunning={this.state.isRunning} selectedAlgo={this.state.selectedAlgo} delay={this.state.delay} setAlgo={this.setAlgo} generateRandomArray={this.generateRandomArray} start={this.start} pause={this.pause} setDelay={this.setDelay}/>
+                <FunctionBar isRunning={this.state.isRunning} selectedAlgo={this.state.selectedAlgo} setAlgo={this.setAlgo} delay={this.state.delay} setDelay={this.setDelay} generateRandomArray={this.generateRandomArray} start={this.start} pause={this.pause}/>
                 <SortChart array={this.state.array} sorted={this.state.sorted} scanElement={this.state.scanElement} pivotBefore={pivotBefore} pivotAfter={pivotAfter}/>
             </div>
         )
