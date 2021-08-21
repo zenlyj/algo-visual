@@ -22,7 +22,7 @@ export default class PriorityQueue {
     }
 
     isEmpty() {
-        return this._heap.length == 0
+        return this._heap.length === 0
     }
 
     peek() {

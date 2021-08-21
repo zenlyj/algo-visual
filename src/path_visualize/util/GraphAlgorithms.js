@@ -78,7 +78,7 @@ export const dijkstra = (sourceNode, targetNode, gridSize, wallNodes, weakWallNo
         for (const neighbor of neighbors) {
             const neighborIdx = gridIdx(neighbor, gridSize.numCols) 
             const edgeWeight = getWeightBetweenNodes(neighborIdx, wallNodes, weakWallNodes)
-            if (!visitedNodes.has(neighborIdx) && edgeWeight != Number.MAX_VALUE && dist[u] + edgeWeight < dist[neighborIdx]) {
+            if (!visitedNodes.has(neighborIdx) && edgeWeight !== Number.MAX_VALUE && dist[u] + edgeWeight < dist[neighborIdx]) {
                 parents[neighborIdx] = u
                 dist[neighborIdx] = dist[u] + edgeWeight
                 pq.enqueue(neighborIdx)

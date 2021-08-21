@@ -5,10 +5,6 @@ import RangeSlider from 'react-bootstrap-range-slider'
 import './FunctionBar.css'
 
 class FunctionBar extends React.Component {
-    constructor() {
-        super()
-    }
-
     render() {
         return (
             <div className="button_container">

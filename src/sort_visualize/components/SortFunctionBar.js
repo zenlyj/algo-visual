@@ -5,10 +5,6 @@ import RangeSlider from 'react-bootstrap-range-slider'
 import './SortFunctionBar.css'
 
 class SortFunctionBar extends React.Component {
-    constructor() {
-        super()
-    }
-
     render() {
         return (
             <div className="sort_button_container">

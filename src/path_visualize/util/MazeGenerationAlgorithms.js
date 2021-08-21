@@ -67,7 +67,7 @@ const getHorizontalGap = (gaps, slicePoint, horizStart, horizEnd, gridSize) => {
 const mazeHelper = (gaps, wallNodes, vertStart, vertEnd, horizStart, horizEnd, gridSize, sourceIdx, targetIdx) => {
     if (vertEnd - vertStart < 2 || horizEnd - horizStart < 2) return;
     const orientation = getWallOrientation(vertStart, vertEnd, horizStart, horizEnd)
-    if (orientation == 'HORIZONTAL') {
+    if (orientation === 'HORIZONTAL') {
         const slicePoint = randInt(vertStart+1, vertEnd-1)
         const horizGaps = getHorizontalGap(gaps, slicePoint, horizStart, horizEnd, gridSize)
         for (let i = horizStart; i <= horizEnd; i++) {
@@ -78,7 +78,7 @@ const mazeHelper = (gaps, wallNodes, vertStart, vertEnd, horizStart, horizEnd, g
         for (let gap of horizGaps) gaps.add(gap)
         mazeHelper(gaps, wallNodes, vertStart, slicePoint-1, horizStart, horizEnd, gridSize, sourceIdx, targetIdx)
         mazeHelper(gaps, wallNodes, slicePoint+1, vertEnd, horizStart, horizEnd, gridSize, sourceIdx, targetIdx)
-    } else if (orientation == 'VERTICAL') {
+    } else if (orientation === 'VERTICAL') {
         const slicePoint = randInt(horizStart+1, horizEnd-1)
         const vertGaps = getVerticalGap(gaps, slicePoint, vertStart, vertEnd, gridSize)
         for (let i = vertStart; i <= vertEnd; i++) {
