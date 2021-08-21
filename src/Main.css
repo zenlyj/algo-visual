@@ -1,6 +1,35 @@
 .app_container {
-    min-width: 100vh;
+    min-width: 100vw;
     min-height: 100vh;
     background-color: #1F2833;
     color: #66FCF1
+}
+
+.mode_options_container {
+    margin:auto;
+    width:75%;
+    display:flex;
+    grid:auto auto auto auto;
+    grid-gap:40px;
+    padding:100px; 
+}
+
+.mode_options_container div {
+    width:50%;
+}
+
+.mode_options_container h1 {
+    font-size:22px;
+    text-align: center;
+    padding-bottom:20px;
+}
+
+.mode_options_container button {
+    background-color:transparent;
+    background-repeat:no-repeat;
+    border:none;
+    outline:none;
+    cursor:pointer;
+    overflow:hidden;
+    width:100%;
 }

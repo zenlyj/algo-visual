@@ -1,9 +1,10 @@
 import React from 'react'
 import PathFinder from './path_visualize/PathFinder'
 import Sorter from './sort_visualize/Sorter'
-import Button from 'react-bootstrap/Button'
 import './Main.css'
 import HomeHeader from './HomeHeader'
+import sortSegment from './resources/sortSegment.gif'
+import pathSegment from './resources/pathSegment.gif'
 
 class Main extends React.Component {
     constructor() {
@@ -16,14 +17,14 @@ class Main extends React.Component {
 
     getHomePage() {
         return (
-            <div>
+            <div className='mode_options_container'>
                 <div>
-                    Path Finding Algorithms
-                    <Button variant="outline-secondary" onClick={()=>this.setState({pathFind:true})}> GO </Button>
+                    <h1> SORTING ALGORITHMS </h1>
+                    <button onClick={()=>this.setState({sorting:true})}><img src={sortSegment} alt="loading..." /></button>
                 </div>
                 <div>
-                    Sorting Algorithms
-                    <Button variant="outline-secondary" onClick={()=>this.setState({sorting:true})}> GO </Button>
+                    <h1> PATH FINDING ALGORITHMS </h1>
+                    <button onClick={()=>this.setState({pathFind:true})}><img src={pathSegment} alt="loading..." /></button>
                 </div>
             </div>
         )
