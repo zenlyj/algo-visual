@@ -25,6 +25,7 @@ class PathFinder extends React.Component {
             isDrawingMode:false,
             selectedWallType:'NON-PASSABLE WALL',
             isRunning:false,
+            isGeneratingMaze:false,
             delay:100
         }
         this.updateSourceNode = this.updateSourceNode.bind(this)
@@ -91,6 +92,7 @@ class PathFinder extends React.Component {
     }
 
     async start() {
+        if (this.state.isGeneratingMaze || this.state.isRunning) return
         if (this.state.buffer.isEmpty()) {
             await(new Promise((resolve) => {
                 this.clearVisuals()
@@ -163,7 +165,8 @@ class PathFinder extends React.Component {
         this.setState({delay:delay})
     }
 
-    async generateMaze() {
+    generateMaze() {
+        if (this.state.isRunning || this.state.isGeneratingMaze) return
         const createPromise = (wallNodes) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
@@ -174,10 +177,13 @@ class PathFinder extends React.Component {
         }
         const res = mazeRecursiveDiv(this.state.gridSize, this.state.sourceNode, this.state.targetNode)
         const wallNodes = new Set()
-        for (let wallNode of res) {
-            wallNodes.add(wallNode)
-            await(createPromise(wallNodes))
-        }
+        this.setState({isGeneratingMaze:true, visitedNodes:new Set(), pathToTarget:new Set(), wallNodes:new Set(), weakWallNodes:new Set()}, async ()=>{
+            for (let wallNode of res) {
+                wallNodes.add(wallNode)
+                await(createPromise(wallNodes))
+            }
+            this.setState({isGeneratingMaze:false})
+        })
     }
 
     render() {
