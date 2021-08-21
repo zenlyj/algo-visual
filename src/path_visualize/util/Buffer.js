@@ -5,7 +5,7 @@ export default class Buffer {
     }
 
     update(numVisited) {
-        this._visited = this._visited.slice(numVisited, this._visited.length-1)
+        this._visited = this._visited.slice(numVisited, this._visited.length)
     }
 
     consumeVisited() {
@@ -18,10 +18,6 @@ export default class Buffer {
         const head = this._path[0]
         this._path.shift()
         return head
-    }
-
-    numVisited() {
-        return this._visited.length === 0
     }
 
     visitedIsEmpty() {
