@@ -3,6 +3,7 @@
     background-color: #0B0C10;
     padding: 20px 10px;
     min-width:100vw;
+    min-height:10vh; 
   }
   
   .header a {

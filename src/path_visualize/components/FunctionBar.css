@@ -1,6 +1,10 @@
 .button_container {
     margin:auto;
-    width:60%;
+    width:85%;
+    display:flex;
+    grid:auto auto auto auto;
+    grid-gap:20px;
+    padding:20px;
 }
 
 .button_container button {
@@ -14,6 +18,7 @@
     cursor:pointer;
     overflow:hidden;
     padding:20px;
+    width:15%;
 }
 
 .button_container button:hover {
@@ -31,6 +36,7 @@
     cursor:pointer;
     overflow:hidden;
     padding:20px;
+    width:20%
 }
 
 .button_container select:hover {
@@ -46,6 +52,5 @@
     font-weight:bold;
     color:#66FCF1;
     width:15%;
-    float:left;
     padding:20px;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { BarChart, Bar, Cell, ResponsiveContainer } from 'recharts';
 
 const generateData = (array) => {
-  let data = array.map(x => {
+  const data = array.map(x => {
     return {value:x}
   })
   return data
@@ -14,13 +14,14 @@ export default class SortChart extends React.Component {
   render() {
     const data = generateData(this.props.array)
     return (
+      <div style={{margin:'auto', width:'85%', overflow:'hidden'}}>
       <ResponsiveContainer width="100%" height={600}>
         <BarChart
           width={500}
           height={300}
           data={data}
           margin={{
-            top: 40,
+            top: 20,
             right: 20,
             left: 20,
             bottom: 20,
@@ -33,6 +34,7 @@ export default class SortChart extends React.Component {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
+      </div>
     );
   }
 }

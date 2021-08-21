@@ -1,19 +1,22 @@
 .sort_button_container {
     margin:auto;
-    width:40%;
+    width:45%;
+    display:flex;
+    grid:auto auto auto auto;
+    grid-gap:20px;
+    padding:20px;
 }
 
 .sort_button_container button {
     font-size:18px;
     font-weight:bold;
     color: #66FCF1;
-    background-color:Transparent;
+    background-color:transparent;
     background-repeat:no-repeat;
     border:none;
     outline:none;
     cursor:pointer;
-    overflow:hidden;
-    padding:30px;
+    width:25%;
 }
 
 .sort_button_container button:hover {
@@ -24,13 +27,12 @@
     font-size:18px;
     font-weight:bold;
     color:#66FCF1;
-    background-color:Transparent;
+    background-color:transparent;
     background-repeat:no-repeat;
     border:none;
     outline:none;
     cursor:pointer;
-    overflow:hidden;
-    padding:30px;
+    width:25%;
 }
 
 .sort_button_container select:hover {
@@ -46,6 +48,4 @@
     font-weight:bold;
     color:#66FCF1;
     width:25%;
-    float:left;
-    padding:30px;
 }

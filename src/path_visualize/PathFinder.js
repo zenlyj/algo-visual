@@ -21,7 +21,7 @@ class PathFinder extends React.Component {
             gridSize:{numRows:25, numCols:45},
             isUpdateSourceNodeMode:false,
             isUpdateTargetNodeMode:false,
-            selectedAlgo:null,
+            selectedAlgo:'BFS',
             isDrawingMode:false,
             selectedWallType:'NON-PASSABLE WALL',
             isRunning:false,
@@ -196,7 +196,7 @@ class PathFinder extends React.Component {
         return (
             <div>
                 <FunctionBar genMaze={this.generateMaze} setAlgo={this.setAlgo} setDelay={this.setDelay} start={this.start} pause={this.pausePlayback} reset={this.reset} setWallType={this.setWallType} isRunning={this.state.isRunning} delay={this.state.delay}/>
-                <div className='table_container'> <Grid gridState={this.state} nodeModifier={nodeModifier}/> </div>
+                <Grid gridState={this.state} nodeModifier={nodeModifier}/>
             </div>
         )
     }

@@ -4,7 +4,7 @@ import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
 import RangeSlider from 'react-bootstrap-range-slider'
 import './SortFunctionBar.css'
 
-class FunctionBar extends React.Component {
+class SortFunctionBar extends React.Component {
     constructor() {
         super()
     }
@@ -42,4 +42,4 @@ class FunctionBar extends React.Component {
     }
 }
 
-export default FunctionBar
+export default SortFunctionBar

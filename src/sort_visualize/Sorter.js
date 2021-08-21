@@ -1,6 +1,6 @@
 import React from 'react'
 import SortChart from './components/SortChart'
-import FunctionBar from './components/SortFunctionBar'
+import SortFunctionBar from './components/SortFunctionBar'
 import {bubbleSort, mergeSort, quickSort, selectionSort, gravitySort} from './util/SortingAlgorithms'
 
 class Sorter extends React.Component {
@@ -249,7 +249,7 @@ class Sorter extends React.Component {
         const pivotAfter = (this.state.pivot !== null && !this.state.pivot.isBefore) ? this.state.pivot.after : null
         return (
             <div>
-                <FunctionBar isRunning={this.state.isRunning} selectedAlgo={this.state.selectedAlgo} setAlgo={this.setAlgo} delay={this.state.delay} setDelay={this.setDelay} generateRandomArray={this.generateRandomArray} start={this.start} pause={this.pause}/>
+                <SortFunctionBar isRunning={this.state.isRunning} selectedAlgo={this.state.selectedAlgo} setAlgo={this.setAlgo} delay={this.state.delay} setDelay={this.setDelay} generateRandomArray={this.generateRandomArray} start={this.start} pause={this.pause}/>
                 <SortChart array={this.state.array} sorted={this.state.sorted} scanElement={this.state.scanElement} pivotBefore={pivotBefore} pivotAfter={pivotAfter}/>
             </div>
         )
