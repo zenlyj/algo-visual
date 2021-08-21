@@ -9,7 +9,6 @@
 
 .sort_button_container button {
     font-size:1.125em;
-    font-weight:bold;
     color: #66FCF1;
     background-color:transparent;
     background-repeat:no-repeat;
@@ -25,7 +24,6 @@
 
 .sort_button_container select {
     font-size:1.125em;
-    font-weight:bold;
     color:#66FCF1;
     background-color:transparent;
     background-repeat:no-repeat;
@@ -45,7 +43,6 @@
 
 .sort_button_container div {
     font-size:1.125em;
-    font-weight:bold;
     color:#66FCF1;
     width:25%;
 }
