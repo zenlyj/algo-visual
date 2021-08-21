@@ -3,12 +3,12 @@
     width:85%;
     display:flex;
     grid:auto auto auto auto;
-    grid-gap:20px;
-    padding:20px;
+    grid-gap:1.25em;
+    padding:1.25em;
 }
 
 .button_container button {
-    font-size:18px;
+    font-size:1.125em;
     font-weight:bold;
     color: #66FCF1;
     background-color:Transparent;
@@ -17,7 +17,7 @@
     outline:none;
     cursor:pointer;
     overflow:hidden;
-    padding:20px;
+    padding:1.25em;
     width:15%;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .button_container select {
-    font-size:18px;
+    font-size:1.125em;
     font-weight:bold;
     color:#66FCF1;
     background-color:Transparent;
@@ -35,7 +35,7 @@
     outline:none;
     cursor:pointer;
     overflow:hidden;
-    padding:20px;
+    padding:1.25em;
     width:20%
 }
 
@@ -48,9 +48,9 @@
 }
 
 .button_container div {
-    font-size:18px;
+    font-size:1.25em;
     font-weight:bold;
     color:#66FCF1;
     width:15%;
-    padding:20px;
+    padding:1.25em;
 }

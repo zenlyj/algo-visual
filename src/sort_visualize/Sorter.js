@@ -8,7 +8,7 @@ class Sorter extends React.Component {
         super()
         this.state = {
             isRunning:false,
-            selectedAlgo:null,
+            selectedAlgo:'SELECTION',
             array:[],
             sorted:new Set(),
             arraySize:50,

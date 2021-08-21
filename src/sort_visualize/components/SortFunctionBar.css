@@ -3,12 +3,12 @@
     width:45%;
     display:flex;
     grid:auto auto auto auto;
-    grid-gap:20px;
-    padding:20px;
+    grid-gap:1.25em;
+    padding:1.25em;
 }
 
 .sort_button_container button {
-    font-size:18px;
+    font-size:1.125em;
     font-weight:bold;
     color: #66FCF1;
     background-color:transparent;
@@ -24,7 +24,7 @@
 }
 
 .sort_button_container select {
-    font-size:18px;
+    font-size:1.125em;
     font-weight:bold;
     color:#66FCF1;
     background-color:transparent;
@@ -44,7 +44,7 @@
 }
 
 .sort_button_container div {
-    font-size:18px;
+    font-size:1.125em;
     font-weight:bold;
     color:#66FCF1;
     width:25%;

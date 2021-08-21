@@ -1,8 +1,9 @@
 .app_container {
-    min-width: 100vw;
+    width:100vw;
     min-height: 90vh;
     background-color: #1F2833;
-    color: #66FCF1
+    overflow: hidden;
+    color: #66FCF1;
 }
 
 .mode_options_container {
