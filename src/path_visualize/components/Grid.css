@@ -1,23 +1,23 @@
 .table_container {
-    width:100%;
-    padding:30px;
+    margin:auto;
+    width:90%;
 }
 
 .default {
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
 }
 
 .source_node {
     background-color:white;
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
 }
 
 .target_node {
     background-color:black;
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
 }
 
 @keyframes visitedAnimation {
@@ -43,8 +43,8 @@
 }
 
 .visited_node {
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
     animation-name: visitedAnimation;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
@@ -74,8 +74,8 @@
 }
 
 .path_node {
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
     animation-name: pathAnimation;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
@@ -88,12 +88,12 @@
 
 .wall_node {
     background-color:#da8d00;
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
 }
 
 .weak_wall_node {
     background-color:#b3b000;
-    height:30px;
-    width:30px;
+    height:25px;
+    width:25px;
 }
