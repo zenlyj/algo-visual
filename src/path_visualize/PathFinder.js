@@ -86,7 +86,9 @@ class PathFinder extends React.Component {
             default:
                 return
         }
-        buffer.update(this.state.visitedNodes.size)
+        if (this.state.visitedNodes.size > 0) {
+            buffer.update(this.state.visitedNodes.size)
+        }
         this.setState({buffer:buffer})
     }
 
@@ -122,6 +124,7 @@ class PathFinder extends React.Component {
                 let visitedNodes = new Set(this.state.visitedNodes)
                 let pathToTarget = new Set(this.state.pathToTarget)
                 if (!this.state.buffer.visitedIsEmpty()) {
+                    console.log(this.state.buffer._visited)
                     visitedNodes.add(this.state.buffer.consumeVisited())
                 } else {
                     pathToTarget.add(this.state.buffer.consumePath())
@@ -156,7 +159,6 @@ class PathFinder extends React.Component {
     }
 
     setWallType(wallType) {
-        console.log(wallType)
         this.setState({selectedWallType:wallType})
     }
 

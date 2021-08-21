@@ -13,6 +13,7 @@ class Main extends React.Component {
             pathFind:false,
             sorting:false
         }
+        this.setHomePage = this.setHomePage.bind(this)
     }
 
     getHomePage() {
@@ -20,20 +21,24 @@ class Main extends React.Component {
             <div className='mode_options_container'>
                 <div>
                     <h1> SORTING ALGORITHMS </h1>
-                    <button onClick={()=>this.setState({sorting:true})}><img src={sortSegment} alt="loading..." /></button>
+                    <a href="javascript:;" onClick={()=>this.setState({sorting:true, pathFind:false})}><img src={sortSegment} alt="loading..." /></a>
                 </div>
                 <div>
                     <h1> PATH FINDING ALGORITHMS </h1>
-                    <button onClick={()=>this.setState({pathFind:true})}><img src={pathSegment} alt="loading..." /></button>
+                    <a href="javascript:;" onClick={()=>this.setState({pathFind:true, sorting:false})}><img src={pathSegment} alt="loading..." /></a>
                 </div>
             </div>
         )
     }
 
+    setHomePage() {
+        this.setState({pathFind:false, sorting:false})
+    }
+
     render() {
         return (
             <div>
-                <HomeHeader />
+                <HomeHeader setHomePage={this.setHomePage}/>
                 <div className={'app_container'}> 
                     {this.state.pathFind ? <PathFinder />
                         : this.state.sorting ? <Sorter />

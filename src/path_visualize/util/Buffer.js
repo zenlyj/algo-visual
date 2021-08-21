@@ -20,6 +20,10 @@ export default class Buffer {
         return head
     }
 
+    numVisited() {
+        return this._visited.length === 0
+    }
+
     visitedIsEmpty() {
         return this._visited.length === 0
     }

@@ -24,7 +24,7 @@
     padding-bottom:20px;
 }
 
-.mode_options_container button {
+.mode_options_container a {
     background-color:transparent;
     background-repeat:no-repeat;
     border:none;

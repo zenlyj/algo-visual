@@ -63,7 +63,6 @@ class Node extends React.Component{
     mouseEnterHandler() {
         const isDrawingMode = this.props.nodeModifier.isDrawingMode
         const updateDrawnNodes = this.props.nodeModifier.updateDrawnNodes 
-
         if (isDrawingMode && this.props.isDefaultNode) {
             updateDrawnNodes(this.props.nodeIndex)
         }
