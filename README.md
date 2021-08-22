@@ -26,7 +26,7 @@ An interactive web application that features:
 ## Landing Page
 At the landing page, you are presented with two options: Sorting Algorithms and Path-Finding Algorithms. Select by clicking on the gif animation. To return to the landing page, click on "Algorithm Visualizer" located in the leftmost side of the header.
 
-![landing-page](src/resources/landing-page.png)
+![landing-page](https://raw.githubusercontent.com/zenlyj/algo-visualizer/user-guide/src/resources/landing-page.PNG)
 
 ## Sorting Algorithms
 
@@ -38,7 +38,7 @@ There are 4 main commands in this mode:
 
 When sorting is complete, the graph should be green in color.
 
-![sorting](src/resources/sorting.png)
+![sorting](https://raw.githubusercontent.com/zenlyj/algo-visualizer/user-guide/src/resources/sorting.PNG)
 
 ## Path Finding Algorithms
 
@@ -55,4 +55,4 @@ There are 7 commands for this mode:
 
 The following diagram depicts the legends for each node type:
 
-![pathfind](src/resources/pathfind.png)
+![pathfind](https://raw.githubusercontent.com/zenlyj/algo-visualizer/user-guide/src/resources/pathfind.PNG)
