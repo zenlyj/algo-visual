@@ -48,7 +48,6 @@ class Sorter extends React.Component {
     }
 
     setAlgo(algo) {
-        console.log(algo)
         if (this.state.isRunning) return
         this.setState({selectedAlgo:algo, buffer:null, sorted:new Set(), scanElement:null, pivot:null})
     }
@@ -134,7 +133,6 @@ class Sorter extends React.Component {
         const sortedSet = this.state.sorted
         let pivot = this.state.pivot
         let toRefreshPivot = (this.state.pivot === null || !this.state.pivot.isBefore) ? true : false
-        let isStart = true
         while (this.state.isRunning) {
             if (buffer.isEmpty()) {
                 this.cleanup()
@@ -143,8 +141,7 @@ class Sorter extends React.Component {
             if (toRefreshPivot) {
                 pivot = buffer.consumePivots()  
                 if (pivot === undefined) pivot = null
-                const delay = isStart ? this.state.delay : this.state.delay*10
-                isStart = false
+                const delay = this.state.pivot === null ? this.state.delay : this.state.delay*10
                 await(createPromise(delay, this.state.array, sortedSet, null, pivot))
                 toRefreshPivot = false
                 continue
