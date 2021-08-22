@@ -1,16 +1,17 @@
 # Algorithm Visualizer
 ReactJS project that brings to life path finding and sorting algorithms in computer science.
 Inspired by Clement Mihailescu, featuring my implementation using ReactJS instead of vanilla Javascript. <br /> 
-Try it out at: https://algo-visualize.netlify.app/
+Try it out at: https://algo-visualize.netlify.app/ <br />
+User Guide: https://zenlyj.github.io/algo-visualizer/
 
 ## About
 An interactive web application that features:
-  * Path-Finding Algorithms that compute paths between a starting point and a destination point. Users can draw their own graphs before running the algorithms.
-  * Maze generation using recursive maze division.
-  * Sorting Algorithms that arranges a list of integers in ascending order.
-  * Pause and adjust the speed of the algorithm to see each step of its execution.
+  * Path Finding Algorithms that compute paths between a starting point and a destination point. Users can draw their own graphs before running the algorithms.
+  * Maze generation using recursive division.
+  * Sorting Algorithms that arrange a list of integers in ascending order.
+  * Pausing and adjustment of the algorithm speed to see each execution step.
 
-## Path-Finding Algorithms
+## Path Finding Algorithms
   * Depth First Search
   * Breadth First Search
   * Dijkstra's Algorithm
