@@ -5,12 +5,12 @@ Try it out at: https://algo-visualize.netlify.app/
 
 ## About
 An interactive web application that features:
-  * Path-Finding Algorithms that compute paths between a starting point and a destination point. Users can draw their own graphs before running the algorithms.
+  * Path Finding Algorithms that compute paths between a starting point and a destination point. Users can draw their own graphs before running the algorithms.
   * Maze generation using recursive division.
-  * Sorting Algorithms that arranges a list of integers in ascending order.
+  * Sorting Algorithms that arrange a list of integers in ascending order.
   * Pausing and adjustment of the algorithm speed to see each execution step.
 
-## Path-Finding Algorithms
+## Path Finding Algorithms
   * Depth First Search
   * Breadth First Search
   * Dijkstra's Algorithm
