@@ -53,6 +53,6 @@ There are 7 commands for this mode:
 6. Reset, clears all visualization and drawn walls.
 7. Maze generation, augments the graph using `Non-Passable Walls` to create a maze.
 
-The following diagram depicts the legends for each node type:
+The following diagram depicts the legend for each node type:
 
 ![pathfind](https://raw.githubusercontent.com/zenlyj/algo-visualizer/user-guide/src/resources/pathfind.PNG)
