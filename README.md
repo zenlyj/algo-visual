@@ -15,7 +15,7 @@ An interactive web application that features:
   * Depth First Search
   * Breadth First Search
   * Dijkstra's Algorithm
-  * Astar Algorithm (Manhattan Hieuristic)
+  * Astar Algorithm (Manhattan Heuristic)
 
 ## Sorting Algorithms
   * Selection Sort
