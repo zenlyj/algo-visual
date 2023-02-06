@@ -1,4 +1,4 @@
-# Algorithm Visualizer
+# AlgoVisual
 ReactJS project that brings to life path finding and sorting algorithms in computer science.
 Inspired by Clement Mihailescu, featuring my implementation using ReactJS instead of vanilla Javascript. <br /> 
 Try it out at: https://algo-visualize.netlify.app/
